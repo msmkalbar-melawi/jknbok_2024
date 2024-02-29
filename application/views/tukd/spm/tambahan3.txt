@@ -1,0 +1,150 @@
+ $cRet .= "<table style=\"border-collapse:collapse;font-family: Times New Roman; font-size:12px\" width=\"100%\" align=\"center\" border=\"1\" cellspacing=\"0\" cellpadding=\"4\">
+                     
+                        ";
+                            
+                                  
+                    $cRet    .= " <tr><td colspan=\"5\" style=\"vertical-align:top;border-top: solid 1px black;border-bottom: none;\"  align=\"center\"><b>RINGKASAN DPA/DPPA/DPPAL-SKPD</b></td></tr> ";                                    
+                    $cRet    .= " <tr><td colspan=\"3\" style=\"vertical-align:top;border-top: solid 1px black;border-bottom: none;\" width=\"2%\" align=\"left\">Jumlah dana DPA/DPPA/DPPAL-SKPD </td>
+                                     <td style=\"vertical-align:top;border-top: solid 1px black;border-right: none;\" width=\"18%\" align=\"center\">$nilai_ang</td>
+                                     <td style=\"vertical-align:top;border-top: solid 1px black;border-left: none;\" width=\"3%\" align=\"right\">(I)</td>
+									 </tr>";                                                                          
+                    $cRet    .= "  <tr><td colspan=\"5\" style=\"vertical-align:center;border-top: solid 1px black;border-bottom: none;\"  align=\"center\"><b>RINGKASAN SPD</b></td></tr> ";
+                    $cRet    .= " <tr><td style=\"valign:center;border-top: solid 1px black;border-bottom: none;\" width=\"2%\" align=\"center\">No. Urut</td>                                     
+                                     <td style=\"valign:center;border-top: solid 1px black;border-bottom: none;\" width=\"38%\" align=\"center\">Nomor SPD</td>
+                                     <td style=\"valign:center;border-top: solid 1px black;border-bottom: none;\" width=\"32%\" align=\"center\">Tanggal SPD</td>
+                                     <td style=\"valign:center;border-top: solid 1px black;border-right: none;\" width=\"18%\" align=\"center\">Jumlah Dana</td>
+                                     <td style=\"valign:center;border-top: solid 1px black;border-left: none;\" width=\"3%\" align=\"right\">&nbsp;</td>
+									 </tr>";
+                                     
+                    $sql1="SELECT no_spd,tgl_spd,total as nilai from trhspd where jns_beban='52' and kd_skpd='$kd'";
+                    $query = $this->db->query($sql1);
+                    $lcno = 0;
+                    $lntotal = 0;
+                    foreach ($query->result() as $row)
+                    {
+                    $lcno = $lcno + 1;
+                    $lntotal = $lntotal + $row->nilai;
+                    $totalspd = number_format($lntotal,"2",".",",");
+                   
+                    $no=$row->no_spd;
+                    $tgl=$row->tgl_spd;
+                    $tanggal = $this->tanggal_format_indonesia($tgl);
+                    $nilai=number_format($row->nilai,"2",".",",");                    
+                     $cRet    .= " <tr><td style=\"vertical-align:center;border-top: solid 1px black;border-bottom: none;\" width=\"7%\" align=\"center\">$lcno</td>                                     
+                                     <td style=\"vertical-align:center;border-top: solid 1px black;border-bottom: none;\" width=\"25%\">$no</td>
+                                     <td style=\"vertical-align:center;border-top: solid 1px black;border-bottom: none;\" width=\"3%\">$tanggal</td>
+                                     <td style=\"vertical-align:center;border-top: solid 1px black;border-right: none;\" width=\"3%\" align=\"right\">$nilai</td>
+                                     <td style=\"vertical-align:center;border-top: solid 1px black;border-left: none;\" width=\"3%\" align=\"right\">&nbsp;</td>
+									 </tr>
+                                     ";
+                    }
+                    $sisaspd=$nilai_angg - $lntotal;
+                    $blmspd=number_format($sisaspd,"2",".",",");
+                    $sqlspptls="SELECT SUM(b.nilai)AS nilai  FROM trdspp b INNER JOIN trhspp a ON b.no_spp=a.no_spp and b.kd_skpd = a.kd_skpd 
+								INNER JOIN trhsp2d c ON a.no_spp = c.no_spp WHERE a.kd_skpd='$kd' 
+                                  AND a.jns_spp IN('6') AND a.no_spp != '$no_spp' AND c.tgl_sp2d <='$tgl_spp'";
+                    $sqlsppls=$this->db->query($sqlspptls);
+                    foreach ($sqlsppls->result() as $row)
+                    {
+                    $jns6     = $row->nilai;
+                    $jns6_    = number_format($jns6,"2",".",",");                   
+                    } 
+                    $sqlspptup="SELECT SUM(b.nilai)AS nilai  FROM trdspp b INNER JOIN trhspp a ON b.no_spp=a.no_spp and b.kd_skpd = a.kd_skpd 
+								INNER JOIN trhsp2d c ON a.no_spp = c.no_spp WHERE a.kd_skpd='$kd' 
+                                  AND a.jns_spp IN('1') AND a.no_spp != '$no_spp' AND c.tgl_sp2d <='$tgl_spp'";
+                    $sqlsppup=$this->db->query($sqlspptup);
+                    foreach ($sqlsppup->result() as $row)
+                    {
+                    $jns1     = $row->nilai;
+                    $jns1_    = number_format($jns1,"2",".",",");                   
+                    }
+                    $sqlspptgu="SELECT SUM(b.nilai)AS nilai  FROM trdspp b INNER JOIN trhspp a ON b.no_spp=a.no_spp and b.kd_skpd = a.kd_skpd 
+								INNER JOIN trhsp2d c ON a.no_spp = c.no_spp WHERE a.kd_skpd='$kd' 
+                                  AND a.jns_spp IN('2') AND a.no_spp != '$no_spp' AND c.tgl_sp2d <='$tgl_spp'";
+                    $sqlsppgu=$this->db->query($sqlspptgu);
+                    foreach ($sqlsppgu->result() as $row)
+                    {
+                    $jns2     = $row->nilai;
+                    $jns2_    = number_format($jns2,"2",".",",");                   
+                    }
+					
+					$sqlsppttu="SELECT SUM(b.nilai)AS nilai  FROM trdspp b INNER JOIN trhspp a ON b.no_spp=a.no_spp and b.kd_skpd = a.kd_skpd 
+								INNER JOIN trhsp2d c ON a.no_spp = c.no_spp WHERE a.kd_skpd='$kd' 
+                                  AND a.jns_spp IN('3') AND a.no_spp != '$no_spp' AND c.tgl_sp2d <='$tgl_spp'";
+                    $sqlspptu=$this->db->query($sqlsppttu);
+                    foreach ($sqlspptu->result() as $row)
+                    {
+                    $jns3     = $row->nilai;
+                    $jns3_    = number_format($jns3,"2",".",",");                   
+                    } 
+                    $jmlblj = $jns6 + $jns1 + $jns3 + $jns2;
+                    $totblj =number_format($jmlblj,"2",".",",");
+                    $sisa   =$lntotal - $jmlblj;
+                    $sisaspp   =number_format($sisa,"2",".",",");
+                                                                                    
+                    $cRet    .= " <tr><td colspan=\"3\" style=\"vertical-align:top;border-top: solid 1px black;border-bottom: none;\" width=\"2%\" align=\"right\"><i>JUMLAH</i> </td>
+                                     <td style=\"vertical-align:top;border-top: solid 1px black;border-right: none;\" width=\"18%\" align=\"right\"> $totalspd</td>
+                                     <td style=\"vertical-align:top;border-top: solid 1px black;border-left: none;\" width=\"3%\" align=\"right\">(II)</td>
+									 </tr>";                                                                         
+                    $cRet    .= " <tr><td colspan=\"3\" style=\"vertical-align:top;border-top: solid 1px black;border-bottom: none;\" width=\"2%\" align=\"right\"><i>Sisa dana yang belum di SPD-kan (I-II)</i> </td>
+                                     <td style=\"vertical-align:top;border-top: solid 1px black;border-right: none;\" width=\"18%\" align=\"right\"> $blmspd</td>
+                                     <td style=\"vertical-align:top;border-top: solid 1px black;border-left: none;\" width=\"3%\" align=\"right\">&nbsp;</td>
+									 </tr>";
+                    $cRet    .= " <tr><td colspan=\"3\" style=\"vertical-align:top;border-top: solid 1px black;border-bottom: none;\" width=\"2%\" align=\"right\">&nbsp;</td>
+                                     <td style=\"vertical-align:top;border-top: solid 1px black;border-right: none;\" width=\"18%\"></td>
+                                     <td style=\"vertical-align:top;border-top: solid 1px black;border-left: none;\" width=\"3%\" align=\"right\">&nbsp;</td>
+									 </tr>"; 
+                    $cRet    .= " <tr><td colspan=\"5\" style=\"vertical-align:top;border-top: solid 1px black;border-bottom: none;\"  align=\"center\"><b>RINGKASAN BELANJA</b></td></tr> ";
+                    $cRet    .= " <tr><td colspan=\"3\" style=\"vertical-align:top;border-top: solid 1px black;border-bottom: none;\" width=\"2%\" align=\"left\">SP2D Belanja UP</td>
+                                     <td style=\"vertical-align:top;border-top: solid 1px black;border-right: none;\" width=\"18%\" align=\"right\">$jns1_</td>
+                                     <td style=\"vertical-align:top;border-top: solid 1px black;border-left: none;\" width=\"3%\" align=\"right\">&nbsp;</td>
+									 </tr>";
+                    $cRet    .= " <tr><td colspan=\"3\" style=\"vertical-align:top;border-top: solid 1px black;border-bottom: none;\" width=\"2%\" align=\"left\">SP2D Belanja GU</td>
+                                     <td style=\"vertical-align:top;border-top: solid 1px black;border-right: none;\" width=\"18%\" align=\"right\">$jns2_</td>
+                                     <td style=\"vertical-align:top;border-top: solid 1px black;border-left: none;\" width=\"3%\" align=\"right\">&nbsp;</td>
+									 </tr>";                    
+                    $cRet    .= " <tr><td colspan=\"3\" style=\"vertical-align:top;border-top: solid 1px black;border-bottom: none;\" width=\"2%\" align=\"left\">SP2D Belanja TU</td>
+                                     <td style=\"vertical-align:top;border-top: solid 1px black;border-right: none;\" width=\"18%\" align=\"right\">$jns3_</td>
+                                     <td style=\"vertical-align:top;border-top: solid 1px black;border-left: none;\" width=\"3%\" align=\"right\">&nbsp;</td>
+									 </tr>";
+					$cRet    .= " <tr><td colspan=\"3\" style=\"vertical-align:top;border-top: solid 1px black;border-bottom: none;\" width=\"2%\" align=\"left\">SP2D Belanja LS GAJI</td>
+                                     <td style=\"vertical-align:top;border-top: solid 1px black;border-right: none;\" width=\"18%\" align=\"right\">".number_format(0,"2",".",",")."</td>
+                                     <td style=\"vertical-align:top;border-top: solid 1px black;border-left: none;\" width=\"3%\" align=\"right\">&nbsp;</td>
+									 </tr>";
+					$cRet    .= " <tr><td colspan=\"3\" style=\"vertical-align:top;border-top: solid 1px black;border-bottom: none;\" width=\"2%\" align=\"left\">SP2D Belanja LS Pengadaan Barang dan Jasa</td>
+                                     <td style=\"vertical-align:top;border-top: solid 1px black;border-right: none;\" width=\"18%\" align=\"right\">$jns6_</td>
+                                     <td style=\"vertical-align:top;border-top: solid 1px black;border-left: none;\" width=\"3%\" align=\"right\">&nbsp;</td>
+									 </tr>";
+                    $cRet    .= " <tr><td colspan=\"3\" style=\"vertical-align:top;border-top: solid 1px black;border-bottom: none;\" width=\"2%\" align=\"right\"><i>JUMLAH</i></td>
+                                     <td style=\"vertical-align:top;border-top: solid 1px black;border-right: none;\" width=\"18%\" align=\"right\">$totblj</td>
+                                     <td style=\"vertical-align:top;border-top: solid 1px black;border-left: none;\" width=\"3%\" align=\"right\">(III)</td>
+									 </tr>";
+                    $cRet    .= " <tr><td colspan=\"3\" style=\"vertical-align:top;border-top: solid 1px black;border-bottom: solid 1px black;\" width=\"2%\" align=\"right\"><i>Sisa SPD yang telah diterbitkan, belum dibelanjakan (II-III)</i></td>
+                                     <td style=\"vertical-align:top;border-top: solid 1px black;border-right: none;\" width=\"18%\" align=\"right\">$sisaspp</td>
+                                     <td style=\"vertical-align:top;border-top: solid 1px black;border-left: none;\" width=\"3%\" align=\"right\">&nbsp;</td>
+									 </tr>";
+					$cRet .=       " </table>";
+        $cRet .="<table style=\"border-collapse:collapse;font-size:12px\" width=\"100%\" align=\"center\" border=\"0\" cellspacing=\"0\" cellpadding=\"1\">
+                    <tr><td align=\"center\" width=\"50%\">&nbsp;</td>                    
+                    <td align=\"center\" width=\"50%\">&nbsp;</td></tr>
+                    <tr><td align=\"center\" width=\"50%\">Mengetahui:</td>                    
+                    <td align=\"center\" width=\"50%\">$daerah, $tanggal</td></tr>
+                    <tr><td align=\"center\" width=\"50%\">$jabatan3</td>                    
+                    <td align=\"center\" width=\"50%\">$jabatan</td></tr>
+                    <tr><td align=\"center\" width=\"50%\">&nbsp;</td>                    
+                    <td align=\"center\" width=\"50%\">&nbsp;</td></tr>                              
+                    <tr><td align=\"center\" width=\"50%\">&nbsp;</td>                    
+                    <td align=\"center\" width=\"50%\">&nbsp;</td></tr>
+                    <tr><td align=\"center\" width=\"50%\"><b><u>$nama3</u></b><br>$pangkat3</td>                    
+                    <td align=\"center\" width=\"50%\"><b><u>$nama</u></b><br>$pangkat</td></tr>                              
+                    <tr><td align=\"center\" width=\"50%\">NIP. $nip3</td>                    
+                    <td align=\"center\" width=\"50%\">NIP. $nip</td></tr>
+                  </table>";
+                $data['prev']= $cRet;
+                if($cetak=='1'){
+			$this->_mpdf('',$cRet,10,10,10,'0',1,''); 
+					}
+				if($cetak=='0'){
+				echo $cRet;
+				}
+           }

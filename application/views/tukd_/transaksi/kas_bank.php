@@ -1,0 +1,196 @@
+
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  	<link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>easyui/themes/default/easyui.css">
+	<link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>easyui/themes/icon.css">
+	<link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>easyui/demo/demo.css">
+	<script type="text/javascript" src="<?php echo base_url(); ?>easyui/jquery-1.8.0.min.js"></script>
+	<script type="text/javascript" src="<?php echo base_url(); ?>easyui/jquery.easyui.min.js"></script>
+	<script type="text/javascript" src="<?php echo base_url(); ?>easyui/jquery.edatagrid.js"></script>
+    <script type="text/javascript" src="<?php echo base_url(); ?>assets/autoCurrency.js"></script>
+    <script type="text/javascript" src="<?php echo base_url(); ?>assets/numberFormat.js"></script>
+    
+    
+    <link href="<?php echo base_url(); ?>easyui/jquery-ui.css" rel="stylesheet" type="text/css"/>
+    <script src="<?php echo base_url(); ?>easyui/jquery-ui.min.js"></script>
+    <script type="text/javascript">
+   
+     $(function(){ 
+        
+      
+      
+       $('#tgl1').datebox({  
+            required:true,
+            formatter :function(date){
+            	var y = date.getFullYear();
+            	var m = date.getMonth()+1;
+            	var d = date.getDate();
+            	return y+'-'+m+'-'+d;
+            }
+        });  
+        
+        $('#tgl_ttd').datebox({  
+            required:true,
+            formatter :function(date){
+            	var y = date.getFullYear();
+            	var m = date.getMonth()+1;
+            	var d = date.getDate();
+            	return y+'-'+m+'-'+d;
+            }
+        });         
+      
+    
+			$('#ttd1').combogrid({  
+					panelWidth:600,  
+					idField:'nip',  
+					textField:'nip',  
+					mode:'remote',
+					url:'<?php echo base_url(); ?>index.php/tukd/load_ttd/BK',  
+					columns:[[  
+						{field:'nip',title:'NIP',width:200},  
+						{field:'nama',title:'Nama',width:400}    
+					]],
+                    onSelect:function(rowIndex,rowData){
+                    $("#nmttd1").attr("value",rowData.nama);
+                    }  
+				}); 
+			
+			$('#ttd2').combogrid({  
+					panelWidth:600,  
+					idField:'nip',  
+					textField:'nip',  
+					mode:'remote',
+					url:'<?php echo base_url(); ?>index.php/tukd/load_ttd/PA',  
+					columns:[[  
+						{field:'nip',title:'NIP',width:200},  
+						{field:'nama',title:'Nama',width:400}    
+					]],
+                    onSelect:function(rowIndex,rowData){
+                    $("#nmttd2").attr("value",rowData.nama);
+                    }  
+  
+				});
+            
+               $('#bulan').combogrid({  
+                   panelWidth:120,
+                   panelHeight:300,  
+                   idField:'bln',  
+                   textField:'nm_bulan',  
+                   mode:'remote',
+                   url:'<?php echo base_url(); ?>index.php/rka/bulan',  
+                   columns:[[ 
+                       {field:'nm_bulan',title:'Nama Bulan',width:700}    
+                   ]] 
+               });      
+      
+       });
+    
+   
+     
+     function openWindow( url ){
+      
+        ctglttd = $('#tgl_ttd').datebox('getValue');
+        ctgl1 =  $('#bulan').combogrid('getValue');
+		var ttd1   = $("#ttd1").combogrid('getValue');
+		var ttd2   = $("#ttd2").combogrid('getValue'); 
+		if(ctglttd==''){
+			alert('Tanggal tidak boleh kosong!');
+			exit();
+		}
+		if(ctgl1==''){
+			alert('Bulan tidak boleh kosong!');
+			exit();
+		}
+		if(ttd1==''){
+			alert('Bendahara Pengeluaran tidak boleh kosong!');
+			exit();
+		}
+		if(ttd2==''){
+			alert('Pengguna Anggaran tidak boleh kosong!');
+			exit();
+		}
+		var ttd_1 =ttd1.split(" ").join("123456789");
+        var ttd_2 =ttd2.split(" ").join("123456789");
+		lc = '?tgl1='+ctgl1+'&tgl_ttd='+ctglttd+'&ttd1='+ttd_1+'&ttd2='+ttd_2;
+        window.open(url+lc,'_blank');
+        window.focus();
+         
+     }  
+     
+    
+    
+    
+  
+   </script>
+
+
+<div id="content1" align="center"> 
+    <h3 align="center"><b>BUKU SIMPANAN BANK</b></h3>
+    
+     <table align="center" style="width:100%;" border="0">
+            
+           
+            <tr>
+                <td colspan="3">
+                
+                <div id="div_periode">
+                        <table style="width:100%;" border="0">
+                            <td width="20%">PERIODE</td>
+                            <td width="1%">:</td>
+                            <td width="79%"><input type="text" id="bulan" style="width: 100px;" /> 
+                            </td>
+                        </table>
+                </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                <div id="div_bend">
+                        <table style="width:100%;" border="0">
+                            <td width="20%">TANGGAL TTD</td>
+                            <td width="1%">:</td>
+                            <td><input type="text" id="tgl_ttd" style="width: 100px;" /> 
+                            </td> 
+                        </table>
+                </div>
+                </td> 
+            </tr>
+			
+			<tr>
+                <td colspan="3">
+                <div id="div_bend">
+                        <table style="width:100%;" border="0">
+                            <td width="20%">Bend. Pengeluaran</td>
+                            <td width="1%">:</td>
+                            <td><input type="text" id="ttd1" style="width: 100px;" /> 
+							<input type="text" id="nmttd1" style="width: 200px;border:0" /> 
+                            </td> 
+                        </table>
+                </div>
+                </td> 
+            </tr>
+			<tr>
+                <td colspan="3">
+                <div id="div_bend">
+                        <table style="width:100%;" border="0">
+                            <td width="20%">Pengguna Anggaran</td>
+                            <td width="1%">:</td>
+                            <td><input type="text" id="ttd2" style="width: 100px;" />  
+							<input type="text" id="nmttd2" style="width: 200px;border:0" /> 
+                            </td> 
+                        </table>
+                </div>
+                </td> 
+            </tr>
+            <td colspan="3">&nbsp;</td>
+            </tr>            
+            <tr>
+                <td colspan="3" align="center">
+                <a href="<?php echo site_url(); ?>/tukd/cetak_simpanan_bank/0" class="easyui-linkbutton" iconCls="icon-print" plain="true" onclick="javascript:openWindow(this.href);return false">Cetak</a>
+                <a href="<?php echo site_url(); ?>/tukd/cetak_simpanan_bank/1" class="easyui-linkbutton" iconCls="icon-pdf" plain="true" onclick="javascript:openWindow(this.href);return false">Cetak</a>
+                </td>                
+            </tr>
+        </table>  
+            
+  
+</div>	

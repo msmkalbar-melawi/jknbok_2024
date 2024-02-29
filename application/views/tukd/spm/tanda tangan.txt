@@ -1,0 +1,41 @@
+        $cRet .="<table style=\"border-collapse:collapse;font-size:12px\" width=\"100%\" align=\"center\" border=\"0\" cellspacing=\"0\" cellpadding=\"1\">
+                    <tr><td align=\"center\" width=\"50%\">&nbsp;</td>                    
+                    <td align=\"center\" width=\"50%\">&nbsp;</td></tr>
+                    <tr><td align=\"center\" width=\"50%\">Mengetahui:</td>                    
+                    <td align=\"center\" width=\"50%\">$daerah, $tanggal</td></tr>
+                    <tr><td align=\"center\" width=\"50%\">$jabatan3</td>                    
+                    <td align=\"center\" width=\"50%\">$jabatan</td></tr>
+                    <tr><td align=\"center\" width=\"50%\">&nbsp;</td>                    
+                    <td align=\"center\" width=\"50%\">&nbsp;</td></tr>                              
+                    <tr><td align=\"center\" width=\"50%\">&nbsp;</td>                    
+                    <td align=\"center\" width=\"50%\">&nbsp;</td></tr>
+                    <tr><td align=\"center\" width=\"50%\"><b><u>$nama3</u></b><br>$pangkat3</td>                    
+                    <td align=\"center\" width=\"50%\"><b><u>$nama</u></b><br>$pangkat</td></tr>                              
+                    <tr><td align=\"center\" width=\"50%\">NIP. $nip3</td>                    
+                    <td align=\"center\" width=\"50%\">NIP. $nip</td></tr>
+                  </table>";
+				  
+				  
+				  
+				  ====
+				  
+				   $sqlttd1="SELECT nama as nm,nip as nip,jabatan as jab,pangkat FROM ms_ttd where kd_skpd='$kd' and nip='$BK'";
+                 $sqlttd=$this->db->query($sqlttd1);
+                 foreach ($sqlttd->result() as $rowttd)
+                {
+                    $nip=$rowttd->nip;                    
+                    $nama= $rowttd->nm;
+                    $jabatan  = $rowttd->jab;
+                    $pangkat  = $rowttd->pangkat;
+                }
+		$sqlttd3="SELECT nama as nm,nip as nip,jabatan as jab,pangkat FROM ms_ttd where kd_skpd='$kd' and nip='$PPTK' AND kode='PPTK'";
+                 $sqlttd=$this->db->query($sqlttd3);
+                 foreach ($sqlttd->result() as $rowttd5)
+                {
+                    $nip3=$rowttd5->nip;                    
+                    $nama3= $rowttd5->nm;
+                    $jabatan3  = $rowttd5->jab;
+                    $pangkat3  = $rowttd5->pangkat;
+                }
+				
+				

@@ -1,0 +1,479 @@
+<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+
+class cpanjar_validasi extends CI_Controller {
+
+    public $org_keu = "";
+    public $skpd_keu = "";
+    
+    function __contruct()
+    {   
+        parent::__construct();
+    }
+
+    function index(){
+        $data['page_title']= 'VALIDASI PANJAR';
+        $this->template->set('title', 'INPUT VALIDASI PANJAR');   
+        $this->template->load('template','tukd/cms/panjar_validasi',$data) ; 
+    }  
+
+    function load_listbelum_validasi_panjar(){
+        $result = array();
+        $row = array();
+        $page = isset($_POST['page']) ? intval($_POST['page']) : 1;
+        $rows = isset($_POST['rows']) ? intval($_POST['rows']) : 10;
+        $offset = ($page-1)*$rows;        
+        
+        $kriteria = $this->input->post('cari');
+        $and ='';
+        if ($kriteria <> ''){                               
+            $and=" and a.tgl_upload='$kriteria'";            
+        }
+        
+        $skpd = $this->session->userdata('kdskpd');
+        
+        $sql = "SELECT count(*) as total from tr_panjar_cmsbank a 
+        where a.kd_skpd='$skpd' and a.status_upload='1' and a.status_validasi='0' $and " ;
+        $query1 = $this->db->query($sql);
+        $total = $query1->row();
+        
+        $query1 = $this->db->query("SELECT a.*,c.no_upload FROM tr_panjar_cmsbank a 
+        left join trdupload_cmsbank_panjar c on a.no_kas = c.no_bukti and a.kd_skpd = c.kd_skpd
+        where a.kd_skpd='$skpd' and a.status_upload='1' and a.status_validasi='0' $and         
+        order by cast(a.no_kas as int),a.kd_skpd");     
+        $result = array();
+        $ii     = 0;
+        foreach($query1->result_array() as $resulte)
+        { 
+            
+            if($resulte['status_validasi']==1){
+            $stt_val="&#10004";}else{$stt_val="X";}            
+               
+            $row[] = array(
+                        'id' => $ii,        
+                        'kd_skpd' => $resulte['kd_skpd'],
+                        'no_bukti' => $resulte['no_kas'],                        
+                        'no_upload' => $resulte['no_upload'],
+                        'tgl_bukti' => $resulte['tgl_kas'],
+                        'ket' => $resulte['keterangan'],
+                        'total' => number_format($resulte['nilai'],2),
+                        'status_upload' => $resulte['status_upload'],
+                        'status_validasix' => $resulte['status_validasi'],
+                        'tgl_upload' => $resulte['tgl_upload'],
+                        'status_validasi' => $stt_val,
+                        'tgl_validasi' => $resulte['tgl_validasi'],
+                        'rekening_awal' => $resulte['rekening_awal'],
+                        'nm_rekening_tujuan' => $resulte['nm_rekening_tujuan'],
+                        'rekening_tujuan' => $resulte['rekening_tujuan'],
+                        'bank_tujuan' => $resulte['bank_tujuan'],
+                        'ket_tujuan' => $resulte['ket_tujuan']                                                     
+                        );
+                        $ii++;
+        }
+        
+        $result["total"] = $total->total;        
+        $result["rows"] = $row;           
+        echo json_encode($result);           
+    }
+    
+    function load_list_validasi_panjar(){
+        $result = array();
+        $row = array();
+        $page = isset($_POST['page']) ? intval($_POST['page']) : 1;
+        $rows = isset($_POST['rows']) ? intval($_POST['rows']) : 10;
+        $offset = ($page-1)*$rows;        
+        
+        $kriteria = $this->input->post('cari');
+        $and ='';
+        if ($kriteria <> ''){                               
+            $and=" and a.tgl_upload='$kriteria'";            
+        }
+        
+        $skpd = $this->session->userdata('kdskpd');
+        
+        $sql = "SELECT count(*) as total from tr_panjar_cmsbank a 
+        where a.kd_skpd='$skpd' and status_upload='1' $and " ;
+        $query1 = $this->db->query($sql);
+        $total = $query1->row();
+        
+        $query1 = $this->db->query("SELECT top $rows a.*,c.no_upload FROM tr_panjar_cmsbank a 
+        left join trdupload_cmsbank_panjar c on a.no_kas = c.no_bukti and a.kd_skpd = c.kd_skpd
+        where a.kd_skpd='$skpd' and a.status_upload='1' $and 
+        and a.no_kas not in (SELECT top $offset a.no_kas FROM tr_panjar_cmsbank a  
+        WHERE a.kd_skpd='$skpd' and a.status_upload='1' $and order by cast(a.no_kas as int))
+        order by cast(a.no_kas as int),a.kd_skpd" );
+        $result = array();
+        $ii     = 0;
+        foreach($query1->result_array() as $resulte)
+        { 
+            
+            if($resulte['status_validasi']==1){
+            $stt_val="&#10004";}else{$stt_val="X";}            
+               
+            $row[] = array(
+                        'id' => $ii,        
+                        'kd_skpd' => $resulte['kd_skpd'],
+                        'no_bukti' => $resulte['no_panjar'],                        
+                        'no_upload' => $resulte['no_upload'],
+                        'tgl_bukti' => $resulte['tgl_panjar'],
+                        'ket' => $resulte['keterangan'],
+                        'total' => number_format($resulte['nilai'],2),
+                        'status_upload' => $resulte['status_upload'],
+                        'status_validasix' => $resulte['status_validasi'],
+                        'tgl_upload' => $resulte['tgl_upload'],
+                        'status_validasi' => $stt_val,
+                        'tgl_validasi' => $resulte['tgl_validasi'],
+                        'rekening_awal' => $resulte['rekening_awal'],
+                        'nm_rekening_tujuan' => $resulte['nm_rekening_tujuan'],
+                        'rekening_tujuan' => $resulte['rekening_tujuan'],
+                        'bank_tujuan' => $resulte['bank_tujuan'],
+                        'ket_tujuan' => $resulte['ket_tujuan']                                                     
+                        );
+                        $ii++;
+        }
+        
+        $result["total"] = $total->total;        
+        $result["rows"] = $row;           
+        echo json_encode($result);           
+    }
+
+    function simpan_validasicms_panjar(){
+        $tabel    = $this->input->post('tabel');                
+        $skpd     = $this->input->post('skpd');
+        $csql     = $this->input->post('sql');      
+        $nval     = $this->input->post('no');  
+        
+        $msg      = array();
+        $skpd_ss  = $this->session->userdata('kdskpd');
+
+    if($tabel == 'trvalidasi_cmsbank_panjar') {
+                    
+                    $sql = "delete from trvalidasi_cmsbank_panjar where kd_bp='$skpd_ss' and no_validasi='$nval'"; 
+                    $asg = $this->db->query($sql);
+                            
+                    $sql = "insert into trvalidasi_cmsbank_panjar(no_voucher,tgl_bukti,no_upload,rekening_awal,nm_rekening_tujuan,rekening_tujuan,bank_tujuan,ket_tujuan,nilai,kd_skpd,kd_bp,status_upload,tgl_validasi,status_validasi,no_validasi,no_bukti)"; 
+                    $asg = $this->db->query($sql.$csql);
+                   
+                    if (!($asg)){
+                       $msg = array('pesan'=>'0');
+                        echo json_encode($msg);                     
+                    }  else { 
+                                           
+                       $sql = "UPDATE
+                            tr_panjar_cmsbank
+                            SET tr_panjar_cmsbank.status_validasi = Table_B.status_validasi,
+                                tr_panjar_cmsbank.tgl_validasi = Table_B.tgl_validasi                                
+                        FROM tr_panjar_cmsbank     
+                        INNER JOIN (select a.no_voucher [no_bukti],a.kd_skpd,a.kd_bp,a.tgl_validasi,a.status_validasi from trvalidasi_cmsbank_panjar a
+                        where a.kd_bp='$skpd_ss' and no_validasi='$nval') AS Table_B ON tr_panjar_cmsbank.no_kas = Table_B.no_bukti AND tr_panjar_cmsbank.kd_skpd = Table_B.kd_skpd
+                        where tr_panjar_cmsbank.kd_skpd='$skpd_ss'
+                        ";
+                        $asg = $this->db->query($sql);
+                        
+                        if (!($asg)){
+                            $msg = array('pesan'=>'0');
+                            echo json_encode($msg);                     
+                        }  else {                     
+                            
+                            $sql = "INSERT INTO tr_panjar (no_kas,tgl_kas,no_panjar,tgl_panjar,kd_skpd,pengguna,nilai,keterangan,pay,rek_bank,kd_kegiatan,status,jns,no_panjar_lalu)
+                                    SELECT b.no_bukti,a.tgl_kas,b.no_bukti,a.tgl_panjar,a.kd_skpd,a.pengguna,a.nilai,a.keterangan,a.pay,a.rek_bank,a.kd_kegiatan,a.status,a.jns,
+                                    (case when a.jns='2' then no_panjar_lalu else b.no_bukti end) no_panjar_lalu
+                                    FROM tr_panjar_cmsbank a left join trvalidasi_cmsbank_panjar b on b.no_voucher=a.no_kas and a.kd_skpd=b.kd_skpd
+                                    WHERE b.no_validasi='$nval' and b.kd_bp='$skpd_ss'";
+                            $asg = $this->db->query($sql);
+                            
+                                if (!($asg)){
+                                $msg = array('pesan'=>'0');
+                                echo json_encode($msg);                     
+                                }  else { 
+                                    //Hpotongan
+                                    $sql = "INSERT INTO trhtrmpot (no_bukti, tgl_bukti, ket, username, tgl_update, kd_skpd, nm_skpd, no_sp2d, nilai, npwp, jns_spp, 
+                                            status, kd_kegiatan, nm_kegiatan, kd_rek5, nm_rek5, nmrekan, pimpinan, alamat, ebilling, 
+                                            rekening_tujuan, nm_rekening_tujuan, no_kas,pay)
+                                            SELECT cast(c.no_bukti as int)+1 as no_bukti, c.tgl_validasi as tgl_bukti, d.ket, d.username, d.tgl_update, d.kd_skpd, d.nm_skpd, d.no_sp2d, d.nilai, d.npwp, d.jns_spp, d.status, d.kd_kegiatan, d.nm_kegiatan, d.kd_rek5, d.nm_rek5, d.nmrekan, d.pimpinan, d.alamat, d.ebilling, d.rekening_tujuan, d.nm_rekening_tujuan, c.no_bukti, 'BANK' 
+                                            FROM trhtrmpot_cmsbank d JOIN tr_panjar_cmsbank a on d.no_voucher=a.no_panjar and a.kd_skpd=d.kd_skpd
+                                            LEFT JOIN trvalidasi_cmsbank_panjar c on c.no_voucher=a.no_panjar and a.kd_skpd=c.kd_skpd
+                                            WHERE c.no_validasi='$nval' and c.kd_skpd='$skpd' ";
+                                    $asg = $this->db->query($sql);                                    
+
+                                    if (!($asg)){
+                                        $msg = array('pesan'=>'0');
+                                        echo json_encode($msg);                     
+                                    }  else {                                                                        
+                                        $sql = "INSERT INTO trdtrmpot (no_bukti, kd_rek5, nm_rek5, nilai, kd_skpd, kd_rek_trans,ebilling)
+                                        SELECT cast(c.no_bukti as int)+1 as no_bukti, b.kd_rek5, b.nm_rek5, b.nilai, b.kd_skpd, b.kd_rek_trans,b.ebilling
+                                        FROM trhtrmpot_cmsbank d inner join trdtrmpot_cmsbank b on b.no_bukti=d.no_bukti and b.kd_skpd=d.kd_skpd
+                                        LEFT JOIN tr_panjar_cmsbank a on d.no_voucher=a.no_panjar and a.kd_skpd=d.kd_skpd
+                                        LEFT JOIN trvalidasi_cmsbank_panjar c on c.no_voucher=a.no_panjar and a.kd_skpd=c.kd_skpd
+                                        WHERE c.no_validasi='$nval' and c.kd_skpd='$skpd'";
+                                        $asg = $this->db->query($sql);                                    
+                        
+                                        if (!($asg)){
+                                            $msg = array('pesan'=>'0');
+                                            echo json_encode($msg);                     
+                                        }  else {                                                                        
+                                            $msg = array('pesan'=>'1');
+                                            echo json_encode($msg);
+                                        }
+                                    }     
+                                }
+                        }   
+                    }                   
+                                                        
+        }
+    }   
+ 
+    function load_list_telahvalidasi(){
+        $result = array();
+        $row = array();
+        $page = isset($_POST['page']) ? intval($_POST['page']) : 1;
+        $rows = isset($_POST['rows']) ? intval($_POST['rows']) : 10;
+        $offset = ($page-1)*$rows;        
+        
+        $kriteria = $this->input->post('cari');
+        $and ='';
+        if ($kriteria <> ''){                               
+            $and=" and a.tgl_validasi='$kriteria'";            
+        }
+        
+        $skpd = $this->session->userdata('kdskpd');
+        $init_skpd = "a.kd_skpd='$skpd'";
+        
+        $sql = "SELECT a.no_bukti,count(*) as total from trhtransout_cmsbank a left join trdtransout_cmsbank b on b.kd_skpd=a.kd_skpd and a.no_voucher=b.no_voucher 
+        where $init_skpd and status_upload='1' $and group by a.no_bukti" ;
+        $query1 = $this->db->query($sql);
+        $total = $query1->row();
+        
+        $query1 = $this->db->query("SELECT a.kd_skpd,a.no_voucher,a.tgl_voucher,a.ket,a.total,a.status_upload,a.status_validasi,
+        a.tgl_upload,a.tgl_validasi,a.rekening_awal,a.nm_rekening_tujuan,a.rekening_tujuan,a.bank_tujuan,
+        a.ket_tujuan,a.status_trmpot,c.no_upload,d.no_bukti FROM trhtransout_cmsbank a left join trdtransout_cmsbank b on b.kd_skpd=a.kd_skpd and a.no_voucher=b.no_voucher 
+        left join trdupload_cmsbank c on a.no_voucher = c.no_voucher and a.kd_skpd = c.kd_skpd
+        left join trvalidasi_cmsbank d on d.no_voucher = c.no_voucher and d.kd_bp = c.kd_bp
+        where $init_skpd and a.status_upload='1' and a.status_validasi='1' $and 
+        group by 
+        a.kd_skpd,a.no_voucher,a.tgl_voucher,a.ket,a.total,a.status_upload,a.status_validasi,
+        a.tgl_upload,a.tgl_validasi,a.rekening_awal,a.nm_rekening_tujuan,a.rekening_tujuan,a.bank_tujuan,
+        a.ket_tujuan,a.status_trmpot,c.no_upload,d.no_bukti
+        order by cast(d.no_bukti as int),a.tgl_validasi,a.kd_skpd");        
+        $result = array();
+        $ii     = 0;
+        foreach($query1->result_array() as $resulte)
+        { 
+            
+            if($resulte['status_validasi']==1){
+            $stt_val="&#10004";}else{$stt_val="X";}            
+               
+            $row[] = array(
+                        'id' => $ii,        
+                        'kd_skpd' => $resulte['kd_skpd'],
+                        'no_voucher' => $resulte['no_voucher'],  
+                        'no_bku' => $resulte['no_bukti'],                        
+                        'no_upload' => $resulte['no_upload'],
+                        'tgl_voucher' => $resulte['tgl_voucher'],
+                        'ket' => $resulte['ket'],
+                        'total' => number_format($resulte['total'],2),
+                        'status_upload' => $resulte['status_upload'],
+                        'status_validasix' => $resulte['status_validasi'],
+                        'tgl_upload' => $resulte['tgl_upload'],
+                        'status_validasi' => $stt_val,
+                        'tgl_validasi' => $resulte['tgl_validasi'],
+                        'rekening_awal' => $resulte['rekening_awal'],
+                        'nm_rekening_tujuan' => $resulte['nm_rekening_tujuan'],
+                        'rekening_tujuan' => $resulte['rekening_tujuan'],
+                        'bank_tujuan' => $resulte['bank_tujuan'],
+                        'ket_tujuan' => $resulte['ket_tujuan'],
+                        'status_pot' => $resulte['status_trmpot']                                                       
+                        );
+                        $ii++;
+        }
+        
+        $result["total"] = $total->total;        
+        $result["rows"] = $row;           
+        echo json_encode($result);           
+    }
+
+    function load_list_validasi(){
+        $result = array();
+        $row = array();
+        $page = isset($_POST['page']) ? intval($_POST['page']) : 1;
+        $rows = isset($_POST['rows']) ? intval($_POST['rows']) : 10;
+        $offset = ($page-1)*$rows;        
+        
+        $kriteria = $this->input->post('cari');
+        $and ='';
+        if ($kriteria <> ''){                               
+            $and=" and a.tgl_upload='$kriteria'";            
+        }
+        
+        $skpd = $this->session->userdata('kdskpd');
+        $cek_skpd = $this->db->query("select count(*) as hasil from ms_skpd_op where kd_skpd='$skpd'")->row();
+        $cek_skpd1 = $cek_skpd->hasil;
+        $init_skpd = "a.kd_skpd='$skpd'";
+        
+        $sql = "SELECT count(*) as total from trhtransout_cmsbank a 
+        where $init_skpd and a.status_upload='1' $and " ;
+        $query1 = $this->db->query($sql);
+        $total = $query1->row();
+        
+        $query1 = $this->db->query("SELECT a.kd_skpd,a.nm_skpd,a.no_tgl,a.no_voucher,a.tgl_voucher,a.no_sp2d,a.ket,a.total,a.status_upload,
+a.tgl_upload,a.status_validasi,a.tgl_validasi,a.rekening_awal,a.nm_rekening_tujuan,a.rekening_tujuan,
+a.bank_tujuan,a.ket_tujuan,a.status_trmpot,c.no_upload FROM trhtransout_cmsbank a left join trdtransout_cmsbank b on b.kd_skpd=a.kd_skpd and a.no_voucher=b.no_voucher 
+        left join trdupload_cmsbank c on a.no_voucher = c.no_voucher and a.kd_skpd = c.kd_skpd
+        where $init_skpd and a.status_upload='1' $and         
+        group by 
+        a.kd_skpd,a.nm_skpd,a.no_tgl,a.no_voucher,a.tgl_voucher,a.no_sp2d,a.ket,a.total,a.status_upload,
+a.tgl_upload,a.status_validasi,a.tgl_validasi,a.rekening_awal,a.nm_rekening_tujuan,a.rekening_tujuan,
+a.bank_tujuan,a.ket_tujuan,a.status_trmpot,c.no_upload
+        order by cast(a.no_voucher as int),a.kd_skpd"); 
+        
+        
+        /*
+        $query1 = $this->db->query("SELECT top $rows a.*,c.no_upload FROM trhtransout_cmsbank a left join trdtransout_cmsbank b on b.kd_skpd=a.kd_skpd and a.no_voucher=b.no_voucher 
+        left join trdupload_cmsbank c on a.no_voucher = c.no_voucher and a.kd_skpd = c.kd_skpd
+        where left(a.kd_skpd,7)=left('$skpd',7) and a.status_upload='1' $and 
+        and a.no_voucher not in (SELECT top $offset a.no_voucher FROM trhtransout_cmsbank a  
+        WHERE left(a.kd_skpd,7)=left('$skpd',7) and a.status_upload='1' $and order by cast(a.no_voucher as int))
+        order by cast(a.no_voucher as int),a.kd_skpd"); 
+        */
+            
+        $result = array();
+        $ii     = 0;
+        foreach($query1->result_array() as $resulte)
+        { 
+            
+            if($resulte['status_validasi']==1){
+            $stt_val="&#10004";}else{$stt_val="X";}            
+               
+            $row[] = array(
+                        'id' => $ii,        
+                        'kd_skpd' => $resulte['kd_skpd'],
+                        'no_voucher' => $resulte['no_voucher'],                        
+                        'no_upload' => $resulte['no_upload'],
+                        'tgl_voucher' => $resulte['tgl_voucher'],
+                        'ket' => $resulte['ket'],
+                        'total' => number_format($resulte['total'],2),
+                        'status_upload' => $resulte['status_upload'],
+                        'status_validasix' => $resulte['status_validasi'],
+                        'tgl_upload' => $resulte['tgl_upload'],
+                        'status_validasi' => $stt_val,
+                        'tgl_validasi' => $resulte['tgl_validasi'],
+                        'rekening_awal' => $resulte['rekening_awal'],
+                        'nm_rekening_tujuan' => $resulte['nm_rekening_tujuan'],
+                        'rekening_tujuan' => $resulte['rekening_tujuan'],
+                        'bank_tujuan' => $resulte['bank_tujuan'],
+                        'ket_tujuan' => $resulte['ket_tujuan'],
+                        'status_pot' => $resulte['status_trmpot']                                                       
+                        );
+                        $ii++;
+        }
+        
+        $result["total"] = $total->total;        
+        $result["rows"] = $row;           
+        echo json_encode($result);           
+    }
+
+    function batal_validasicms(){
+        $tabel    = $this->input->post('tabel');  
+        $skpd     = $this->input->post('skpd');
+        $nbku     = $this->input->post('nobukti');   
+        $nbku_i   = strval($nbku)+1;     
+        $nval     = $this->input->post('novoucher'); 
+        $tglbku   = $this->input->post('tglvalid');
+        $msg      = array();
+        $skpd_ss  = $this->session->userdata('kdskpd');
+
+    if($tabel == 'trvalidasi_cmsbank') {
+                    
+                    //hapus Htrans   
+                    $sql ="delete from trhtransout where no_bukti='$nbku' and kd_skpd='$skpd'";
+                    $asg = $this->db->query($sql);   
+                            
+                    if (!($asg)){
+                       $msg = array('pesan'=>'0');
+                        echo json_encode($msg);                     
+                    }  else {                        
+                       
+                       $sql ="delete from trdtransout where no_bukti='$nbku' and kd_skpd='$skpd'";
+                       $asg = $this->db->query($sql);   
+                    
+                        $asg = $this->db->query($sql);
+                        if (!($asg)){
+                            $msg = array('pesan'=>'0');
+                            echo json_encode($msg);                     
+                        }  else {                     
+                            
+                            $sql ="delete from trvalidasi_cmsbank where no_bukti='$nbku' and no_voucher='$nval' and kd_skpd='$skpd'";
+                            $asg = $this->db->query($sql);
+                            
+                                if (!($asg)){
+                                $msg = array('pesan'=>'0');
+                                echo json_encode($msg);                     
+                                }  else {
+                                    
+                                    $sql ="update trhtransout_cmsbank set status_validasi='0', tgl_validasi='' where no_voucher='$nval' and kd_skpd='$skpd'";
+                                    $asg = $this->db->query($sql);                                   
+                                    
+                                    if (!($asg)){
+                                        $msg = array('pesan'=>'0');
+                                        echo json_encode($msg);                     
+                                    }  else {                                                                        
+                                        //Hpotongan
+                                        $sql = "select count(*) as jml from trhtransout_cmsbank where no_voucher='$nval' and kd_skpd='$skpd' and status_trmpot='1'";
+                                            $asg = $this->db->query($sql)->row();                                    
+                                                $initjml = $asg->jml;
+                                                
+                                                if($initjml=='1'){
+                                                
+                                                $sql = "delete trhtrmpot where no_bukti='$nbku_i' and kd_skpd='$skpd'";
+                                                $asg = $this->db->query($sql);                                    
+                                    
+                                                if (!($asg)){
+                                                    $msg = array('pesan'=>'0');
+                                                    echo json_encode($msg);                     
+                                                }  else {                  
+                                                        
+                                                    $sql = "delete trdtrmpot where no_bukti='$nbku_i' and kd_skpd='$skpd'";
+                                                    $asg = $this->db->query($sql);                                    
+                                    
+                                                    if (!($asg)){
+                                                        $msg = array('pesan'=>'0');
+                                                        echo json_encode($msg);                     
+                                                    }  else {                  
+                                                        
+                                                        $sql = "delete trdtransout_transfer where no_bukti='$nbku' and kd_skpd='$skpd'";
+                                                        $asg = $this->db->query($sql);                                    
+                                    
+                                                        if (!($asg)){
+                                                            $msg = array('pesan'=>'0');
+                                                            echo json_encode($msg);                     
+                                                        }  else {                  
+                                                            $msg = array('pesan'=>'1');
+                                                            echo json_encode($msg);
+                                                        }
+                                                        
+                                                    }
+                                                        
+                                                }
+                                                    
+                                                }else{
+                                                        $sql = "delete trdtransout_transfer where no_bukti='$nbku' and kd_skpd='$skpd'";
+                                                        $asg = $this->db->query($sql);                                    
+                                    
+                                                        if (!($asg)){
+                                                            $msg = array('pesan'=>'0');
+                                                            echo json_encode($msg);                     
+                                                        }  else {                  
+                                                            $msg = array('pesan'=>'1');
+                                                            echo json_encode($msg);
+                                                        }
+                                                }                                            
+                                    }
+                            }
+                        }
+                    }                    
+                                                        
+        }
+    }    
+
+
+}
