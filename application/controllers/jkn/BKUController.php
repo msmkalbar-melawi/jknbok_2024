@@ -329,7 +329,12 @@ class BKUController extends CI_Controller{
 
         $hasil_pjk = $this->db->query($asql_pjk);
         $pjkk = $hasil_pjk->row();
-        $sld_pajakk = !empty($pjkkk->total) ? $pjkkk->total : '0';
+        // if(!empty($pjkk->total)) {
+        //     $sld_pajakk = $pjkk->total;
+        //       }else{ 
+        //         $sld_pajakk =0; 
+        //     }
+        $sld_pajakk = !empty($pjkk->total) ? $pjkk->total : 0;
 
      
 
