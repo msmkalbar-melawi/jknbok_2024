@@ -128,32 +128,6 @@
                 }
             });
 
-            $('#ttd2').combogrid({
-                panelWidth: 200,
-                idField: 'nip',
-                textField: 'nip',
-                mode: 'remote',
-                url: '<?php echo base_url(); ?>index.php/jkn/SP2BController/load_ttd/PA',
-                columns: [
-                    [{
-                            field: 'nip',
-                            title: 'NIP',
-                            width: 200
-                        },
-                        {
-                            field: 'nama',
-                            title: 'Nama',
-                            width: 400
-                        }
-                    ]
-                ],
-                onSelect: function(rowIndex, rowData) {
-                    $("#nm_ttd2").attr("value", rowData.nama);
-                }
-            });
-
-
-
 
 
 
@@ -863,7 +837,7 @@
                 idField: 'nip',
                 textField: 'nip',
                 mode: 'remote',
-                url: '<?php echo base_url(); ?>index.php/jkn/SP2BController/load_ttd/PA',
+                url: '<?php echo base_url(); ?>index.php/jkn/SP2BController/load_ttd/JKNBOK-PA',
                 columns: [
                     [{
                             field: 'nip',
