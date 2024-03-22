@@ -34,7 +34,7 @@ class LraController extends CI_Controller
     public function ttd()
     {
         $kd_skpd = $this->session->userdata('kdskpd');
-        $sql = "SELECT * FROM ms_ttd WHERE kd_skpd= '$kd_skpd' and kode in ('KPA','PA')";
+        $sql = "SELECT * FROM ms_ttd WHERE kd_skpd= '$kd_skpd' and kode in ('JKNBOK-KPA','JKNBOK-PA')";
 
         $mas = $this->db->query($sql);
         $result = array();

@@ -110,7 +110,7 @@
                 idField: 'nip',
                 textField: 'nip',
                 mode: 'remote',
-                url: '<?php echo base_url(); ?>index.php/bok/SP3BController/load_ttd/PA',
+                url: '<?php echo base_url(); ?>index.php/bok/SP3BController/load_ttd/JKNBOK-PA',
                 columns: [
                     [{
                             field: 'nip',
@@ -841,7 +841,7 @@
                 idField: 'nip',
                 textField: 'nip',
                 mode: 'remote',
-                url: '<?php echo base_url(); ?>index.php/jkn/SP2BController/load_ttd/PA',
+                url: '<?php echo base_url(); ?>index.php/jkn/SP2BController/load_ttd/JKNBOK-PA',
                 columns: [
                     [{
                             field: 'nip',

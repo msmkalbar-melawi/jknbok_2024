@@ -83,7 +83,7 @@
                 idField: 'nip',
                 textField: 'nip',
                 mode: 'remote',
-                url: '<?php echo base_url(); ?>index.php/bok/PenerimaanBOKController/load_ttd/PA',
+                url: '<?php echo base_url(); ?>index.php/bok/PenerimaanBOKController/load_ttd/JKNBOK-PA',
                 columns: [
                     [{
                             field: 'nip',
@@ -106,7 +106,7 @@
                 idField: 'nip',
                 textField: 'nip',
                 mode: 'remote',
-                url: '<?php echo base_url(); ?>index.php/bok/PenerimaanBOKController/load_ttd2/BK',
+                url: '<?php echo base_url(); ?>index.php/bok/PenerimaanBOKController/load_ttd2/JKNBOK-BK',
                 columns: [
                     [{
                             field: 'nip',

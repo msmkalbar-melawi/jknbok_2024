@@ -32,7 +32,7 @@ class BppajakController extends CI_Controller
     public function ttd()
     {
         $skpd = $this->session->userdata('kdskpd');
-        $sql = $this->db->query("SELECT * FROM ms_ttd WHERE kd_skpd = '$skpd' AND kode IN ('BK')");
+        $sql = $this->db->query("SELECT * FROM ms_ttd WHERE kd_skpd = '$skpd' AND kode IN ('JKNBOK-BK')");
         // $result = array();
         foreach ($sql->result_array() as $data) {
             $result[] = array(
@@ -46,7 +46,7 @@ class BppajakController extends CI_Controller
     public function ttdPA()
     {
         $skpd = $this->session->userdata('kdskpd');
-        $sql = $this->db->query("SELECT * FROM ms_ttd WHERE kd_skpd = '$skpd' AND kode IN ('PA','KPA')");
+        $sql = $this->db->query("SELECT * FROM ms_ttd WHERE kd_skpd = '$skpd' AND kode IN ('JKNBOK-PA','JKNBOK-KPA')");
         // $result = array();
         foreach ($sql->result_array() as $data) {
             $result[] = array(

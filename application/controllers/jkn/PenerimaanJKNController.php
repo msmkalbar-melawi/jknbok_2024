@@ -263,7 +263,7 @@ class PenerimaanJKNController extends CI_Controller
     public function load_ttd()
     {
         $kd_skpd  = $this->session->userdata('kdskpd');
-        $sql = "SELECT * FROM ms_ttd WHERE kd_skpd= '$kd_skpd' and kode in ('PA','KPA')";
+        $sql = "SELECT * FROM ms_ttd WHERE kd_skpd= '$kd_skpd' and kode in ('JKNBOK-PA','JKNBOK-KPA')";
         $mas = $this->db->query($sql);
         $result = array();
         $ii = 0;

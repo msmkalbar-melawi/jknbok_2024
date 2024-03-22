@@ -227,7 +227,7 @@
             idField: 'nip',
             textField: 'nip',
             mode: 'remote',
-            url: '<?php echo base_url(); ?>index.php/jkn/PenerimaanJKNController/load_ttd2/bk',
+            url: '<?php echo base_url(); ?>index.php/jkn/PenerimaanJKNController/load_ttd2/JKNBOK-BK',
             columns: [
                 [{
                         field: 'nip',
