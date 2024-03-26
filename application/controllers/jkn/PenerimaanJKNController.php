@@ -462,14 +462,14 @@ class PenerimaanJKNController extends CI_Controller
 							 </tr>
 							 </table>";
 
-        $csql = "SELECT nip,nama,jabatan,pangkat FROM ms_ttd WHERE nip = '$ttd1' AND kd_skpd = '$skpd' AND kode in ('PA','KPA')";
+        $csql = "SELECT nip,nama,jabatan,pangkat FROM ms_ttd WHERE nip = '$ttd1' AND kd_skpd = '$skpd' AND kode in ('JKNBOK-PA','JKNBOK-KPA')";
         $hasil3 = $this->db->query($csql);
         $trh3 = $hasil3->row();
         $nmPA = $trh3->nama;
         $nipPA = $trh3->nip;
         $pangkatPA = $trh3->pangkat;
         $jbtanPA = $trh3->jabatan;
-        $csql = "SELECT nip,nama,jabatan,pangkat FROM ms_ttd WHERE nip = '$ttd2' AND kd_skpd = '$skpd' AND kode in ('BK')";
+        $csql = "SELECT nip,nama,jabatan,pangkat FROM ms_ttd WHERE nip = '$ttd2' AND kd_skpd = '$skpd' AND kode in ('JKNBOK-BK')";
         $hasil3 = $this->db->query($csql);
         $trh4 = $hasil3->row();
         $nmBK = $trh4->nama;

@@ -402,11 +402,11 @@ class BKUController extends CI_Controller
         $lcskpdd = substr($lcskpd, 0, 22);
 
         $nippa = str_replace('123456789', ' ', $_REQUEST['ttd']);
-        $csql = "SELECT nip as nip_pa,nama as nm_pa,jabatan,pangkat FROM ms_ttd WHERE nip = '$nippa' AND left(kd_skpd,22) = '$lcskpdd' AND (kode='PA' OR kode='KPA')";
+        $csql = "SELECT nip as nip_pa,nama as nm_pa,jabatan,pangkat FROM ms_ttd WHERE nip = '$nippa' AND left(kd_skpd,22) = '$lcskpdd' AND (kode='JKNBOK-PA' OR kode='JKNBOK-KPA')";
         $hasil = $this->db->query($csql);
         $trh2 = $hasil->row();
         $nipbk = str_replace('123456789', ' ', $_REQUEST['ttd2']);
-        $csql = "SELECT nip as nip_bk,nama as nm_bk,jabatan,pangkat FROM ms_ttd WHERE nip = '$nipbk' AND left(kd_skpd,22) = '$lcskpdd' AND kode='BK'";
+        $csql = "SELECT nip as nip_bk,nama as nm_bk,jabatan,pangkat FROM ms_ttd WHERE nip = '$nipbk' AND left(kd_skpd,22) = '$lcskpdd' AND kode='JKNBOK-BK'";
         $hasil3 = $this->db->query($csql);
         $trh3 = $hasil3->row();
         $csql = "SELECT nm_skpd FROM ms_skpd_jkn WHERE kd_skpd = '$lcskpd' ";

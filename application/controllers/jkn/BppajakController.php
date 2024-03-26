@@ -204,8 +204,8 @@ class BppajakController extends CI_Controller
 							 </TR>';
         $cRet .= '</TABLE>';
 
-        $datattd1 = $this->db->query("SELECT * FROM ms_ttd WHERE kd_skpd='$skpd' AND nip='$ttd1' AND kode IN ('BK')")->row();
-        $datattd2 = $this->db->query("SELECT * FROM ms_ttd WHERE kd_skpd='$skpd' AND nip='$ttd2' AND kode IN ('PA','KPA')")->row();
+        $datattd1 = $this->db->query("SELECT * FROM ms_ttd WHERE kd_skpd='$skpd' AND nip='$ttd1' AND kode IN ('JKNBOK-BK')")->row();
+        $datattd2 = $this->db->query("SELECT * FROM ms_ttd WHERE kd_skpd='$skpd' AND nip='$ttd2' AND kode IN ('JKNBOK-PA','JKNBOK-KPA')")->row();
         $cRet .= '<TABLE width="100%" style="font-size:12px">
         <TR>
             <TD align="center" ><b>&nbsp;</TD>
