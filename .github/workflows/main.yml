@@ -1,0 +1,39 @@
+name: 🚀 Deploy backend on push branch main
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🚚 Get latest code on branch main
+        uses: actions/checkout@v1
+
+      - name: 🐧 Deploy to linux server
+        uses: appleboy/scp-action@v0.1.4
+
+        env:
+          HOST: ${{ secrets.HOSTNAME }}
+          USERNAME: ${{ secrets.USERNAME }}
+          PORT: ${{ secrets.PORT }}
+          KEY: ${{ secrets.SSHKEY }}
+          PASSPHRASE: ${{ secrets.PASSWORD }}
+        with:
+          source: '.'
+          target: '/var/www/app5/simakdajknbok_2024'
+
+      - name: 🪟 Deploy to windows server
+        uses: appleboy/scp-action@v0.1.4
+
+        env:
+          HOST: ${{ secrets.HOSTNAME_WINDOWS }}
+          USERNAME: ${{ secrets.USERNAME_WINDOWS }}
+          PORT: ${{ secrets.PORT }}
+          KEY: ${{ secrets.SSHKEY_WINDOWS }}
+          PASSPHRASE: ${{ secrets.PASSWORD_WINDOWS }}
+        with:
+          source: '.'
+          target: 'C:\aplikasi\app5\simakdajknbok_2024'
