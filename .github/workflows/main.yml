@@ -35,4 +35,4 @@ jobs:
           key: ${{ secrets.SSHKEY_WINDOWS }}
           passphrase: ${{ secrets.PASSWORD_WINDOWS }}
           script: |
-            cd C:\aplikasi\app5\action && ./jknbok_2024.bat
+            cd C:\aplikasi\app5\action && jknbok_2024.bat
