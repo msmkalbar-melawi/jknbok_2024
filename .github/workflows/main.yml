@@ -26,14 +26,14 @@ jobs:
           target: '/var/www/app5/simakdajknbok_2024'
 
       - name: 🪟 Deploy to windows server
-        uses: appleboy/scp-action@v0.1.4
+        uses:  appleboy/ssh-action@v1.0.3
 
-        env:
-          HOST: ${{ secrets.HOSTNAME_WINDOWS }}
-          USERNAME: ${{ secrets.USERNAME_WINDOWS }}
-          PORT: ${{ secrets.PORT }}
-          KEY: ${{ secrets.SSHKEY_WINDOWS }}
-          PASSPHRASE: ${{ secrets.PASSWORD_WINDOWS }}
         with:
-          source: '.'
-          target: 'C:\aplikasi\app5\simakdajknbok_2024'
+          host: ${{ secrets.HOSTNAME_WINDOWS }}
+          username: ${{ secrets.USERNAME_WINDOWS }}
+          port: ${{ secrets.PORT }}
+          key: ${{ secrets.SSHKEY_WINDOWS }}
+          passphrase: ${{ secrets.PASSWORD_WINDOWS }}
+          script: |
+            cd C:\aplikasi\app5\action
+            jknbok_2024.bat
