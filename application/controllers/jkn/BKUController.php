@@ -454,11 +454,11 @@ class BKUController extends CI_Controller{
                 <td align=\"center\" bgcolor=\"#CCCCCC\" style=\"font-size:12px;border-top:solid 1px black\">1</td>
                 <td align=\"center\" bgcolor=\"#CCCCCC\" style=\"font-size:12px;border-top:solid 1px black\">2</td>
                 
+                <td align=\"center\" bgcolor=\"#CCCCCC\" style=\"font-size:12px;border-top:solid 1px black\">3</td>
                 <td align=\"center\" bgcolor=\"#CCCCCC\" style=\"font-size:12px;border-top:solid 1px black\">4</td>
                 <td align=\"center\" bgcolor=\"#CCCCCC\" style=\"font-size:12px;border-top:solid 1px black\">5</td>
                 <td align=\"center\" bgcolor=\"#CCCCCC\" style=\"font-size:12px;border-top:solid 1px black\">6</td>
                 <td align=\"center\" bgcolor=\"#CCCCCC\" style=\"font-size:12px;border-top:solid 1px black\">7</td>
-                <td align=\"center\" bgcolor=\"#CCCCCC\" style=\"font-size:12px;border-top:solid 1px black\">8</td>
             </tr>
             </thead>";
 
@@ -475,19 +475,19 @@ class BKUController extends CI_Controller{
                ORDER BY CAST(no_kas AS int) ASC";
         } else {
 
-            $sql = "SELECT * FROM ( SELECT z.* FROM ((SELECT kd_skpd,tgl_kas,tgl_kas AS tanggal,no_kas,'' AS kegiatan,
-           '' AS rekening,uraian,0 AS terima,0 AS keluar , '' AS st,jns_trans FROM trhrekal a
+            $sql = "SELECT * FROM ( SELECT z.* FROM ((SELECT kd_skpd,tgl_kas,tgl_kas AS tanggal,CAST(no_kas AS INT) AS no_kas,'' AS kegiatan,
+           '' AS rekening,uraian,0 AS terima,0 AS keluar , 0 AS st,jns_trans FROM trhrekal a
            where month(a.tgl_kas) = '$bulan' AND
            year(a.tgl_kas) = '$thn_ang'and kd_skpd='$lcskpd')
                UNION ALL
-              ( SELECT a.kd_skpd,a.tgl_kas,NULL AS tanggal,b.no_kas,b.kd_sub_kegiatan as kegiatan,b.kd_rek6 AS rekening,
+              ( SELECT a.kd_skpd,a.tgl_kas,NULL AS tanggal,CAST(b.no_kas AS INT) AS no_kas,b.kd_sub_kegiatan as kegiatan,b.kd_rek6 AS rekening,
                b.nm_rek6 AS uraian, 
                CASE WHEN b.keluar+b.terima<0 THEN (keluar*-1) ELSE terima END as terima,
                CASE WHEN b.keluar+b.terima<0 THEN (terima*-1) ELSE keluar END as keluar,
                case when b.terima<>0 then '1' else '2' end AS st, b.jns_trans FROM
                trdrekal b LEFT JOIN trhrekal a ON a.no_kas = b.no_kas and a.kd_skpd = b.kd_skpd where month(a.tgl_kas) ='$bulan' AND
                year(a.tgl_kas) = '$thn_ang' and b.kd_skpd='$lcskpd'))z ) OKE
-               ORDER BY CAST(no_kas AS int) ASC";
+               ORDER BY no_kas, st";
         }
         $hasil = $this->db->query($sql);
         $lcno = 0;
@@ -511,10 +511,8 @@ class BKUController extends CI_Controller{
 
         $totterima = 0;
         $totkeluar = 0;
-        // $lhasil = 0;
-        // echo ($aa);
-        // return;
-        foreach ($hasil->result() as $row) {
+        $source = $hasil->result();
+        foreach ($source as $key => $row) {
             $cRet .= "<tr>";
             $lhasil = $lhasil + $row->terima - $row->keluar;
             // return;
@@ -525,78 +523,48 @@ class BKUController extends CI_Controller{
                 $jaka = $this->tukd_model->tanggal_ind($a);
                 $lcno = $lcno + 1;
                 $no_bku = $row->no_kas;
+            }
 
-                $cRet .= "<td valign=\"top\" align=\"center\" style=\"font-size:12px;border-bottom:none 1px gray;border-top:solid 1px gray\">$lcno</td>
-                                    <td valign=\"top\" align=\"center\" style=\"font-size:12px;border-bottom:dashed 1px gray;border-top:solid 1px gray\">$jaka</td>
-                                    <td valign=\"top\" align=\"center\" style=\"font-size:12px;border-bottom:none 1px gray;border-top:solid 1px gray\">$no_bku</td>                
-                                <td valign=\"top\" align=\"left\" style=\"font-size:12px;border-bottom:dashed 1px gray;border-top:solid 1px gray\">$row->uraian</td>
-                                ";
-                if (empty($row->terima) or ($row->terima) == 0) {
-                    $cRet .= "<td valign=\"top\" align=\"right\" style=\"font-size:12px;border-bottom:dashed 1px gray;border-top:solid 1px gray\"></td>";
-                } else {
-                    $lcterima = $lcterima + $row->terima;
-                    $cRet .= "<td valign=\"top\" align=\"right\" style=\"font-size:12px;border-bottom:dashed 1px gray;border-top:solid 1px gray\">" . number_format($row->terima, "2", ",", ".") . "</td>";
-                }
-                if (empty($row->keluar) or ($row->keluar) == 0) {
-                    $cRet .= "<td valign=\"top\" align=\"right\" style=\"font-size:12px;border-bottom:dashed 1px gray;border-top:solid 1px gray\"></td>";
-                } else {
-                    $lckeluar = $lckeluar + $row->keluar;
-                    $cRet .= "<td valign=\"top\" align=\"right\" style=\"font-size:12px;border-bottom:dashed 1px gray;border-top:solid 1px gray\">" . number_format($row->keluar, "2", ",", ".") . "</td>";
-                }
-                if (empty($row->terima) and empty($row->keluar) or ($row->terima) == 0 and ($row->keluar) == 0) {
-                    $cRet .= "<td valign=\"top\" align=\"right\" style=\"font-size:12px;border-bottom:dashed 1px gray;border-top:solid 1px gray\"></td>";
-                } else {
-                    $cRet .= "<td valign=\"top\" align=\"right\" style=\"font-size:12px;border-bottom:dashed 1px gray;border-top:solid 1px gray\">" . number_format($lhasil, "2", ",", ".") . "</td>";
-                }
-            } else {
-                $cRet .= " <td valign=\"top\" align=\"center\" style=\"font-size:12px;border-bottom:none 1px gray;border-top:none 1px gray\">&nbsp;</td>
-                                  <td valign=\"top\" align=\"center\" style=\"font-size:12px;border-bottom:dashed 1px gray;border-top:dashed 1px gray\">&nbsp;</td>
-                                <td valign=\"top\" align=\"center\" style=\"font-size:12px;border-bottom:none 1px gray;border-top:dashed 1px gray\"></td>                
-                                <td valign=\"top\" align=\"left\" style=\"font-size:12px;border-bottom:dashed 1px gray;border-top:dashed 1px gray\">$row->uraian</td>
-                                ";
-                if (empty($row->terima) or ($row->terima) == 0) {
-                    $cRet .= "<td valign=\"top\" align=\"right\" style=\"font-size:12px;border-bottom:dashed 1px gray;border-top:dashed 1px gray\"></td>";
-                } else {
+            $terima = $row->terima > 0 ? number_format($row->terima,2,',','.')  : null;
+            $keluar = $row->keluar > 0 ? number_format($row->keluar,2,',','.')  : null;
 
-                    if ($row->jns_trans == '3') {
-                     $lcterima_pajak = $lcterima_pajak + $row->terima;
-                    } else {
-                    $lcterima = $lcterima + $row->terima;
-                    }
-
-                    $cRet .= "<td valign=\"top\" align=\"right\" style=\"font-size:12px;border-bottom:dashed 1px gray;border-top:dashed 1px gray\">" . number_format($row->terima, "2", ",", ".") . "</td>";
-                }
-                if (empty($row->keluar) or ($row->keluar) == 0) {
-                    $cRet .= "<td valign=\"top\" align=\"right\" style=\"font-size:12px;border-bottom:dashed 1px gray;border-top:dashed 1px gray\"></td>";
+            
+            if ($key > 0 && $key < sizeof($source) ) {
+                if ($source[$key-1]->no_kas == $row->no_kas) {
+                    $cRet .= "
+                        <td style='text-align:center; padding-left: 10px; font-size: 12px; border-top: 1px solid #FFF'></td>
+                        <td style='text-align:center; padding-left: 10px; font-size: 12px; border-top: 1px dashed gray'></td>
+                        <td style='text-align:center; padding-left: 10px; font-size: 12px; border-top: 1px dashed gray'></td>
+                        <td style='padding-left: 10px; font-size: 12px; border-top: 1px dashed gray'>$row->uraian</td>
+                        <td style='text-align: right; font-size: 12px; border-top: 1px dashed gray; padding-right: 10px'>$terima</td>
+                        <td style='text-align: right; font-size: 12px; border-top: 1px dashed gray; padding-right: 10px'>$keluar</td>
+                        <td style='text-align: right; font-size: 12px; border-top: 1px dashed gray; padding-right: 10px'>" . number_format($lhasil, "2", ",", ".") . "</td>
+                    ";
                 } else {
-
-                    if ($row->jns_trans == '4') {
-                        $lckeluar_pajak = $lckeluar_pajak + $row->keluar;
-                    } else {
-                        $lckeluar = $lckeluar + $row->keluar;
-                    }
-
-                    $cRet .= "<td valign=\"top\" align=\"right\" style=\"font-size:12px;border-bottom:dashed 1px gray;border-top:dashed 1px gray\">" . number_format($row->keluar, "2", ",", ".") . "</td>";
+                    $cRet .= "<td style='text-align:center; padding-left: 10px; font-size: 12px'>$lcno</td>
+                    <td style='text-align:center; padding-left: 10px; font-size: 12px'>$jaka</td>
+                    <td style='text-align:center; padding-left: 10px; font-size: 12px'>$no_bku</td>
+                    <td style='padding-left: 10px; font-size: 12px'>$row->uraian</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>";
                 }
-                if (empty($row->terima) and empty($row->keluar) or ($row->terima) == 0 and ($row->keluar) == 0) {
-                    $cRet .= "<td valign=\"top\" align=\"right\" style=\"font-size:12px;border-bottom:dashed 1px gray;border-top:dashed 1px gray\"></td>";
-                } else {
-                    $cRet .= "<td valign=\"top\" align=\"right\" style=\"font-size:12px;border-bottom:dashed 1px gray;border-top:dashed 1px gray\">" . number_format($lhasil, "2", ",", ".") . "</td>";
-                }
+            }  else {
+                $cRet .= "<td style='text-align:center; padding-left: 10px; font-size: 12px'>$lcno</td>
+                    <td style='text-align:center; padding-left: 10px; font-size: 12px'>$jaka</td>
+                    <td style='text-align:center; padding-left: 10px; font-size: 12px'>$no_bku</td>
+                    <td style='padding-left: 10px; font-size: 12px'>$row->uraian</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>";
             }
             $cRet .= "</tr>";
         }
-
-        $cRet .= "<tr>
-                    <td valign=\"top\" align=\"center\" style=\"font-size:12px;border: solid 1px white;border-top:solid 1px black;\">&nbsp;</td>
-                    <td valign=\"top\" align=\"center\" style=\"font-size:12px;border: solid 1px white;border-top:solid 1px black;\">&nbsp;</td>
-                    <td valign=\"top\" align=\"center\" style=\"font-size:12px;border: solid 1px white;border-top:solid 1px black;\">&nbsp;</td>
-                    <td valign=\"top\" align=\"center\" style=\"font-size:12px;border: solid 1px white;border-top:solid 1px black;\">&nbsp;</td>
-                    <td valign=\"top\" align=\"center\" style=\"font-size:12px;border: solid 1px white;border-top:solid 1px black;\">&nbsp;</td>
-                    <td valign=\"top\" align=\"center\" style=\"font-size:12px;border: solid 1px white;border-top:solid 1px black;\">&nbsp;</td>
-                    <td valign=\"top\" align=\"center\" style=\"font-size:12px;border: solid 1px white;border-top:solid 1px black;\">&nbsp;</td>
-                    
-                 </tr>";
+        $cRet .= "
+            <tr>
+                <td colspan='7' style='padding-top: 20px; border-bottom: 1px solid white;border-left: 1px solid white;border-right: 1px solid white'></td>
+            </tr>
+        ";
 
         if ($pilih == 1) {
             $csql = "SELECT SUM(z.terima) AS jmterima,SUM(z.keluar) AS jmkeluar , SUM(z.terima)-SUM(z.keluar) AS sel FROM (SELECT kd_skpd,tgl_kas,tgl_kas AS tanggal,no_kas,
