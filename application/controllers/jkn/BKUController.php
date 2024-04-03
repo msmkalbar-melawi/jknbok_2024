@@ -472,7 +472,7 @@ class BKUController extends CI_Controller{
                b.nm_rek6 AS uraian, b.terima,b.keluar , case when b.terima<>0 then '1' else '2' end AS st, b.jns_trans FROM
                trdrekal b LEFT JOIN trhrekal a ON a.no_kas = b.no_kas and a.kd_skpd = b.kd_skpd where (a.tgl_kas BETWEEN '$lctgl1' AND '$lctgl2')
                AND year(a.tgl_kas) = '$thn_ang' and b.kd_skpd='$lcskpd'))z )okei
-               ORDER BY tgl_kas,jns_trans,st,rekening";
+               ORDER BY CAST(no_kas AS int) ASC";
         } else {
 
             $sql = "SELECT * FROM ( SELECT z.* FROM ((SELECT kd_skpd,tgl_kas,tgl_kas AS tanggal,no_kas,'' AS kegiatan,
@@ -487,7 +487,7 @@ class BKUController extends CI_Controller{
                case when b.terima<>0 then '1' else '2' end AS st, b.jns_trans FROM
                trdrekal b LEFT JOIN trhrekal a ON a.no_kas = b.no_kas and a.kd_skpd = b.kd_skpd where month(a.tgl_kas) ='$bulan' AND
                year(a.tgl_kas) = '$thn_ang' and b.kd_skpd='$lcskpd'))z ) OKE
-               ORDER BY tgl_kas,jns_trans,st,rekening";
+               ORDER BY CAST(no_kas AS int) ASC";
         }
         $hasil = $this->db->query($sql);
         $lcno = 0;
