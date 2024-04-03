@@ -525,6 +525,18 @@ class BKUController extends CI_Controller{
                 $no_bku = $row->no_kas;
             }
 
+            if ($row->jns_trans == '3') {
+                $lcterima_pajak = $lcterima_pajak + $row->terima;
+            } else {
+                $lcterima = $lcterima + $row->terima;
+            }
+
+            if ($row->jns_trans == '4') {
+                $lckeluar_pajak = $lckeluar_pajak + $row->keluar;
+            } else {
+                $lckeluar = $lckeluar + $row->keluar;
+            }
+
             $terima = $row->terima > 0 ? number_format($row->terima,2,',','.')  : null;
             $keluar = $row->keluar > 0 ? number_format($row->keluar,2,',','.')  : null;
 

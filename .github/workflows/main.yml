@@ -36,4 +36,5 @@ jobs:
           passphrase: ${{ secrets.PASSWORD_WINDOWS }}
           script: |
             cd C:\aplikasi\app5\action
+            dir
             jknbok_2024.bat
