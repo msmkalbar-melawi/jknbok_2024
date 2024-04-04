@@ -74,78 +74,78 @@ class LraController extends CI_Controller
             $judul = 'KAPITASI JKN';
             $dataisian = $this->db->query("SELECT * FROM (
                 -- REK 6 --
-                SELECT * FROM (SELECT '5' AS urut, b.kd_skpd,b.nm_skpd,b.kd_sub_kegiatan,b.kd_rek6,b.nm_rek6,SUM(b.anggaran) AS anggaran,SUM(b.realisasi) as realisasi
+                SELECT * FROM (SELECT '5' AS urut, b.kd_skpd,b.nm_skpd,b.kd_sub_kegiatan,b.nm_sub_kegiatan,b.kd_rek6,b.nm_rek6,SUM(b.anggaran) AS anggaran,SUM(b.realisasi) as realisasi
                 FROM
                     jkn_realisasi_anggaran_belanja as b
                 WHERE b.kd_skpd = '$kd_skpd' OR (b.tanggal BETWEEN '$periode1' AND '$periode2' AND b.kd_skpd = '$kd_skpd')
-                GROUP BY b.kd_skpd,b.nm_skpd,b.kd_sub_kegiatan,b.kd_rek6,b.nm_rek6 UNION ALL 
-                SELECT '5' AS urut, p.kd_skpd,p.nm_skpd,p.kd_sub_kegiatan,p.kd_rek6,p.nm_rek6,SUM(p.anggaran) AS anggaran,SUM(p.realisasi) as realisasi
+                GROUP BY b.kd_skpd,b.nm_skpd,b.kd_sub_kegiatan,b.nm_sub_kegiatan,b.kd_rek6,b.nm_rek6 UNION ALL 
+                SELECT '5' AS urut, p.kd_skpd,p.nm_skpd,p.kd_sub_kegiatan,p.nm_sub_kegiatan,p.kd_rek6,p.nm_rek6,SUM(p.anggaran) AS anggaran,SUM(p.realisasi) as realisasi
                 FROM
                     jkn_realisasi_anggaran_pendapatan as p
                 WHERE p.kd_skpd = '$kd_skpd' OR (p.tanggal BETWEEN '$periode1' AND '$periode2' AND p.kd_skpd = '$kd_skpd')
-                GROUP BY p.kd_skpd,p.nm_skpd,p.kd_sub_kegiatan,p.kd_rek6,p.nm_rek6) AS rek6
+                GROUP BY p.kd_skpd,p.nm_skpd,p.kd_sub_kegiatan,p.nm_sub_kegiatan,p.kd_rek6,p.nm_rek6) AS rek6
                 -- END REK 6 --
                 UNION ALL
                 -- REK 5 --
-                SELECT '4' AS urut,sources.kd_skpd,sources.nm_skpd, sources.kd_sub_kegiatan,rek.kd_rek5 AS kd_rek6, rek.nm_rek5, SUM(anggaran) AS anggaran, SUM(realisasi) AS realisasi FROM (
-                    SELECT b.kd_skpd,b.nm_skpd,b.kd_sub_kegiatan,b.kd_rek6,b.nm_rek6,SUM(b.anggaran) AS anggaran,SUM(b.realisasi) as realisasi
+                SELECT '4' AS urut,sources.kd_skpd,sources.nm_skpd, sources.kd_sub_kegiatan,sources.nm_sub_kegiatan,rek.kd_rek5 AS kd_rek6, rek.nm_rek5, SUM(anggaran) AS anggaran, SUM(realisasi) AS realisasi FROM (
+                    SELECT b.kd_skpd,b.nm_skpd,b.kd_sub_kegiatan,b.nm_sub_kegiatan,b.kd_rek6,b.nm_rek6,SUM(b.anggaran) AS anggaran,SUM(b.realisasi) as realisasi
                     FROM
                         jkn_realisasi_anggaran_belanja as b
                     WHERE b.kd_skpd = '$kd_skpd' OR (b.tanggal BETWEEN '$periode1' AND '$periode2' AND b.kd_skpd = '$kd_skpd')
-                    GROUP BY b.kd_skpd,b.nm_skpd,b.kd_sub_kegiatan,b.kd_rek6,b.nm_rek6 UNION ALL 
-                    SELECT p.kd_skpd,p.nm_skpd,p.kd_sub_kegiatan,p.kd_rek6,p.nm_rek6,SUM(p.anggaran) AS anggaran,SUM(p.realisasi) as realisasi
+                    GROUP BY b.kd_skpd,b.nm_skpd,b.kd_sub_kegiatan,b.nm_sub_kegiatan,b.kd_rek6,b.nm_rek6 UNION ALL 
+                    SELECT p.kd_skpd,p.nm_skpd,p.kd_sub_kegiatan,p.nm_sub_kegiatan,p.kd_rek6,p.nm_rek6,SUM(p.anggaran) AS anggaran,SUM(p.realisasi) as realisasi
                     FROM
                         jkn_realisasi_anggaran_pendapatan as p
                     WHERE p.kd_skpd = '$kd_skpd' OR (p.tanggal BETWEEN '$periode1' AND '$periode2' AND p.kd_skpd = '$kd_skpd')
-                    GROUP BY p.kd_skpd,p.nm_skpd,p.kd_sub_kegiatan,p.kd_rek6,p.nm_rek6
-                ) AS sources LEFT JOIN ms_rek5 AS rek ON rek.kd_rek5 = LEFT(sources.kd_rek6,8) GROUP BY sources.kd_skpd,sources.nm_skpd, sources.kd_sub_kegiatan,rek.kd_rek5, rek.nm_rek5
+                    GROUP BY p.kd_skpd,p.nm_skpd,p.kd_sub_kegiatan,p.nm_sub_kegiatan,p.kd_rek6,p.nm_rek6
+                ) AS sources LEFT JOIN ms_rek5 AS rek ON rek.kd_rek5 = LEFT(sources.kd_rek6,8) GROUP BY sources.kd_skpd,sources.nm_skpd, sources.kd_sub_kegiatan,sources.nm_sub_kegiatan,rek.kd_rek5, rek.nm_rek5
                 -- END REK 5 -- 
                 UNION ALL
                 -- REK 4 --
-                SELECT '3' AS urut,sources.kd_skpd,sources.nm_skpd, sources.kd_sub_kegiatan,rek.kd_rek4 AS kd_rek6, rek.nm_rek4, SUM(anggaran) AS anggaran, SUM(realisasi) AS realisasi FROM (
-                    SELECT b.kd_skpd,b.nm_skpd,b.kd_sub_kegiatan,b.kd_rek6,b.nm_rek6,SUM(b.anggaran) AS anggaran,SUM(b.realisasi) as realisasi
+                SELECT '3' AS urut,sources.kd_skpd,sources.nm_skpd, sources.kd_sub_kegiatan,sources.nm_sub_kegiatan,rek.kd_rek4 AS kd_rek6, rek.nm_rek4, SUM(anggaran) AS anggaran, SUM(realisasi) AS realisasi FROM (
+                    SELECT b.kd_skpd,b.nm_skpd,b.kd_sub_kegiatan,b.nm_sub_kegiatan,b.kd_rek6,b.nm_rek6,SUM(b.anggaran) AS anggaran,SUM(b.realisasi) as realisasi
                     FROM
                         jkn_realisasi_anggaran_belanja as b
                     WHERE b.kd_skpd = '$kd_skpd' OR (b.tanggal BETWEEN '$periode1' AND '$periode2' AND b.kd_skpd = '$kd_skpd')
-                    GROUP BY b.kd_skpd,b.nm_skpd,b.kd_sub_kegiatan,b.kd_rek6,b.nm_rek6 UNION ALL 
-                    SELECT p.kd_skpd,p.nm_skpd,p.kd_sub_kegiatan,p.kd_rek6,p.nm_rek6,SUM(p.anggaran) AS anggaran,SUM(p.realisasi) as realisasi
+                    GROUP BY b.kd_skpd,b.nm_skpd,b.kd_sub_kegiatan,b.nm_sub_kegiatan,b.kd_rek6,b.nm_rek6 UNION ALL 
+                    SELECT p.kd_skpd,p.nm_skpd,p.kd_sub_kegiatan,p.nm_sub_kegiatan,p.kd_rek6,p.nm_rek6,SUM(p.anggaran) AS anggaran,SUM(p.realisasi) as realisasi
                     FROM
                         jkn_realisasi_anggaran_pendapatan as p
                     WHERE p.kd_skpd = '$kd_skpd' OR (p.tanggal BETWEEN '$periode1' AND '$periode2' AND p.kd_skpd = '$kd_skpd')
-                    GROUP BY p.kd_skpd,p.nm_skpd,p.kd_sub_kegiatan,p.kd_rek6,p.nm_rek6
-                ) AS sources LEFT JOIN ms_rek4 AS rek ON rek.kd_rek4 = LEFT(sources.kd_rek6,6) GROUP BY sources.kd_skpd,sources.nm_skpd, sources.kd_sub_kegiatan,rek.kd_rek4, rek.nm_rek4
+                    GROUP BY p.kd_skpd,p.nm_skpd,p.kd_sub_kegiatan,p.nm_sub_kegiatan,p.kd_rek6,p.nm_rek6
+                ) AS sources LEFT JOIN ms_rek4 AS rek ON rek.kd_rek4 = LEFT(sources.kd_rek6,6) GROUP BY sources.kd_skpd,sources.nm_skpd, sources.kd_sub_kegiatan,sources.nm_sub_kegiatan,rek.kd_rek4, rek.nm_rek4
                 -- END REK 4 -- 
                 UNION ALL
                 -- REK 3 --
-                SELECT '2' AS urut,sources.kd_skpd,sources.nm_skpd, sources.kd_sub_kegiatan,rek.kd_rek3 AS kd_rek6, rek.nm_rek3, SUM(anggaran) AS anggaran, SUM(realisasi) AS realisasi FROM (
-                    SELECT b.kd_skpd,b.nm_skpd,b.kd_sub_kegiatan,b.kd_rek6,b.nm_rek6,SUM(b.anggaran) AS anggaran,SUM(b.realisasi) as realisasi
+                SELECT '2' AS urut,sources.kd_skpd,sources.nm_skpd, sources.kd_sub_kegiatan,sources.nm_sub_kegiatan,rek.kd_rek3 AS kd_rek6, rek.nm_rek3, SUM(anggaran) AS anggaran, SUM(realisasi) AS realisasi FROM (
+                    SELECT b.kd_skpd,b.nm_skpd,b.kd_sub_kegiatan,b.nm_sub_kegiatan,b.kd_rek6,b.nm_rek6,SUM(b.anggaran) AS anggaran,SUM(b.realisasi) as realisasi
                     FROM
                         jkn_realisasi_anggaran_belanja as b
                     WHERE b.kd_skpd = '$kd_skpd' OR (b.tanggal BETWEEN '$periode1' AND '$periode2' AND b.kd_skpd = '$kd_skpd')
-                    GROUP BY b.kd_skpd,b.nm_skpd,b.kd_sub_kegiatan,b.kd_rek6,b.nm_rek6 UNION ALL 
-                    SELECT p.kd_skpd,p.nm_skpd,p.kd_sub_kegiatan,p.kd_rek6,p.nm_rek6,SUM(p.anggaran) AS anggaran,SUM(p.realisasi) as realisasi
+                    GROUP BY b.kd_skpd,b.nm_skpd,b.kd_sub_kegiatan,b.nm_sub_kegiatan,b.kd_rek6,b.nm_rek6 UNION ALL 
+                    SELECT p.kd_skpd,p.nm_skpd,p.kd_sub_kegiatan,p.nm_sub_kegiatan,p.kd_rek6,p.nm_rek6,SUM(p.anggaran) AS anggaran,SUM(p.realisasi) as realisasi
                     FROM
                         jkn_realisasi_anggaran_pendapatan as p
                     WHERE p.kd_skpd = '$kd_skpd' OR (p.tanggal BETWEEN '$periode1' AND '$periode2' AND p.kd_skpd = '$kd_skpd')
-                    GROUP BY p.kd_skpd,p.nm_skpd,p.kd_sub_kegiatan,p.kd_rek6,p.nm_rek6
-                ) AS sources LEFT JOIN ms_rek3 AS rek ON rek.kd_rek3 = LEFT(sources.kd_rek6,4) GROUP BY sources.kd_skpd,sources.nm_skpd, sources.kd_sub_kegiatan,rek.kd_rek3, rek.nm_rek3
+                    GROUP BY p.kd_skpd,p.nm_skpd,p.kd_sub_kegiatan,p.nm_sub_kegiatan,p.kd_rek6,p.nm_rek6
+                ) AS sources LEFT JOIN ms_rek3 AS rek ON rek.kd_rek3 = LEFT(sources.kd_rek6,4) GROUP BY sources.kd_skpd,sources.nm_skpd, sources.kd_sub_kegiatan,sources.nm_sub_kegiatan,rek.kd_rek3, rek.nm_rek3
                 -- END REK 3 -- 
                 UNION ALL
                 -- REK 2 --
-                SELECT '1' AS urut,sources.kd_skpd,sources.nm_skpd, sources.kd_sub_kegiatan,rek.kd_rek2 AS kd_rek6, rek.nm_rek2, SUM(anggaran) AS anggaran, SUM(realisasi) AS realisasi FROM (
-                    SELECT b.kd_skpd,b.nm_skpd,b.kd_sub_kegiatan,b.kd_rek6,b.nm_rek6,SUM(b.anggaran) AS anggaran,SUM(b.realisasi) as realisasi
+                SELECT '1' AS urut,sources.kd_skpd,sources.nm_skpd, sources.kd_sub_kegiatan,sources.nm_sub_kegiatan,rek.kd_rek2 AS kd_rek6, rek.nm_rek2, SUM(anggaran) AS anggaran, SUM(realisasi) AS realisasi FROM (
+                    SELECT b.kd_skpd,b.nm_skpd,b.kd_sub_kegiatan,b.nm_sub_kegiatan,b.kd_rek6,b.nm_rek6,SUM(b.anggaran) AS anggaran,SUM(b.realisasi) as realisasi
                     FROM
                         jkn_realisasi_anggaran_belanja as b
                     WHERE b.kd_skpd = '$kd_skpd' OR (b.tanggal BETWEEN '$periode1' AND '$periode2' AND b.kd_skpd = '$kd_skpd')
-                    GROUP BY b.kd_skpd,b.nm_skpd,b.kd_sub_kegiatan,b.kd_rek6,b.nm_rek6 UNION ALL 
-                    SELECT p.kd_skpd,p.nm_skpd,p.kd_sub_kegiatan,p.kd_rek6,p.nm_rek6,SUM(p.anggaran) AS anggaran,SUM(p.realisasi) as realisasi
+                    GROUP BY b.kd_skpd,b.nm_skpd,b.kd_sub_kegiatan,b.nm_sub_kegiatan,b.kd_rek6,b.nm_rek6 UNION ALL 
+                    SELECT p.kd_skpd,p.nm_skpd,p.kd_sub_kegiatan,p.nm_sub_kegiatan,p.kd_rek6,p.nm_rek6,SUM(p.anggaran) AS anggaran,SUM(p.realisasi) as realisasi
                     FROM
                         jkn_realisasi_anggaran_pendapatan as p
                     WHERE p.kd_skpd = '$kd_skpd' OR (p.tanggal BETWEEN '$periode1' AND '$periode2' AND p.kd_skpd = '$kd_skpd')
-                    GROUP BY p.kd_skpd,p.nm_skpd,p.kd_sub_kegiatan,p.kd_rek6,p.nm_rek6
+                    GROUP BY p.kd_skpd,p.nm_skpd,p.kd_sub_kegiatan,p.nm_sub_kegiatan,p.kd_rek6,p.nm_rek6
                 ) AS sources LEFT JOIN ms_rek2 AS rek ON rek.kd_rek2 = LEFT(sources.kd_rek6,2) 
                     INNER JOIN ms_sub_kegiatan as kegiatan ON  kegiatan.kd_sub_kegiatan = sources.kd_sub_kegiatan 
-                    GROUP BY sources.kd_skpd,sources.nm_skpd, sources.kd_sub_kegiatan,rek.kd_rek2, rek.nm_rek2
+                    GROUP BY sources.kd_skpd,sources.nm_skpd, sources.kd_sub_kegiatan,sources.nm_sub_kegiatan,rek.kd_rek2, rek.nm_rek2
                 -- END REK 2 -- 
 
             ) AS source ORDER BY kd_rek6");
