@@ -109,7 +109,7 @@ $autoload['language'] = array();
 |
 */
 
-$autoload['model'] = array('master_model','cek_anggaran_model','kegiatan_terpilih_model','rka_model','tukd_model','akuntansi_model','samsat_model','angkas_ro_model','master_ttd','support','status_anggaran','ClientModel');
+$autoload['model'] = array('master_model','cek_anggaran_model','kegiatan_terpilih_model','rka_model','tukd_model','akuntansi_model','samsat_model','angkas_ro_model','master_ttd','support','status_anggaran','clientmodel');
 
 
 /* End of file autoload.php */
