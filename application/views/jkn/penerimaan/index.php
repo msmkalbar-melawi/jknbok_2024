@@ -32,6 +32,7 @@
         var cid = 0;
         var lcidx = 0;
         var lcstatus = '';
+        let tahun_anggaran;
 
         $(document).ready(function() {
             $("#accordion").accordion();
