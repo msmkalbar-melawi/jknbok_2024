@@ -361,7 +361,7 @@ class SP3BController extends CI_Controller
         
         <TR>
             <TD align="center" style="border-right:none;">
-                <img src="/image/melawi_transparant.png"   width="75" height="100" align="left" style="margin:5px"/>
+                <img src="'. base_url('image/melawi_transparant.png') .'"   width="75" height="100" align="left" style="margin:5px"/>
             </TD>
             <TD style="border-left:none;text-align: center;">
                    <align="center"><b>PEMERINTAH KABUPATEN MELAWI</b><br>
