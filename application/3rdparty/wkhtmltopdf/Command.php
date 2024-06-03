@@ -2,7 +2,7 @@
 
 namespace mikehaertl\wkhtmlto;
 
-require_once('application/3rdparty/wkhtmltopdf/shellcommand/Command.php');
+require_once(__DIR__.'/shellcommand/Command.php');
 
 use mikehaertl\shellcommand\Command as BaseCommand;
 
