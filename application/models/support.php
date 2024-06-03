@@ -338,6 +338,7 @@ class support extends CI_Model
         $this->mpdf->defaultfooterfontsize = 3; /* in pts */
         $this->mpdf->defaultfooterfontstyle = I;    /* blank, B, I, or BI */
         $this->mpdf->defaultfooterline = 1;
+        $this->mpdf->showImageErrors = true;
         $sa = 1;
         $tes = 0;
         if ($hal == '') {
