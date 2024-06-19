@@ -108,7 +108,7 @@
             <td width="90%">
                 <input type="text" class="input" disabled style="display: inline-block;" value="<?php echo $this->session->userdata('kdskpd'); ?>">
                 <input type="text" class="input" disabled style="display: inline-block; width: 300px" value="<?php $kd = $this->session->userdata('kdskpd');
-                                                                                                                echo $this->db->query("SELECT nm_skpd from ms_skpd where kd_skpd='$kd'
+                                                                                                                echo $this->db->query("SELECT nm_skpd from bok_ms_skpd where kd_skpd='$kd'
                                                                                                                 UNION ALL
                                                                                                                 SELECT nm_skpd from ms_skpd_jkn where kd_skpd='$kd'")->row()->nm_skpd; ?>">
             </td>

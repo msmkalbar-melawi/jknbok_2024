@@ -4107,7 +4107,7 @@ class Master extends CI_Controller
         $kriteria = '';
         $cbidang = '2';
         $kriteria = $this->input->post('cari');
-        $where = " kd_skpd='$kd_skpd' and kode in ('BK','BP','PPTK','PPK','PA','KPA')";
+        $where = " kd_skpd='$kd_skpd' and kode LIKE '%JKNBOK%'";
         $where1 = " kd_skpd='$kd_skpd' and kode in ('BK','BP','PPTK','PPK','PA','KPA')";
 
         if ($kriteria <> '') {
