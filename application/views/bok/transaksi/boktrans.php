@@ -334,10 +334,17 @@
                                             textField: 'kd_rek6',
                                             mode: 'remote',
                                             columns: [
-                                                [{
+                                                [
+                                                    {
+                                                        field: 'kd_sub_kegiatan',
+                                                        title: 'Kode Sub Kegiatan',
+                                                        width: 150,
+                                                        align: 'center'
+                                                    },
+                                                    {
                                                         field: 'kd_rek6',
                                                         title: 'Kode Rekening',
-                                                        width: 70,
+                                                        width: 100,
                                                         align: 'center'
                                                     },
                                                     {
@@ -689,20 +696,27 @@
                         })
                     });
                     $('#kd_rekbelanja').combogrid({
-                        panelWidth: 400,
+                        panelWidth: 650,
                         idField: 'kd_rek6',
                         textField: 'kd_rek6',
                         columns: [
-                            [{
+                            [
+                                {
+                                    field: 'kd_sub_kegiatan',
+                                    title: 'Kode Sub Kegiatan',
+                                    width: 150,
+                                    align: 'center'
+                                },
+                                {
                                     field: 'kd_rek6',
                                     title: 'Kode Rekening',
-                                    width: 200,
+                                    width: 100,
                                     align: 'center'
                                 },
                                 {
                                     field: 'nm_rek6',
                                     title: 'Nama Rekening',
-                                    width: 200
+                                    width: 400
                                 }
                             ]
                         ]
