@@ -170,9 +170,10 @@ class Laporan extends CI_Model {
                         ON trh.kd_skpd = trd.kd_skpd AND trd.no_bukti = trh.no_bukti
                     WHERE
                         trh.kd_skpd = source.kd_skpd 
-                        AND trd.kd_rek6 = source.kode_rekening 
+                        AND LEFT(trd.kd_rek6,LEN(source.kode_rekening)) = source.kode_rekening 
+                        AND trd.kd_sub_kegiatan = source.kd_sub_kegiatan
                         AND trh.tgl_bukti BETWEEN '". $this->periode[0] ."' 
-                    AND '". $this->periode[1] ."' 
+                        AND '". $this->periode[1] ."' 
                     ),
                     0 
                 ) AS realisasi";
