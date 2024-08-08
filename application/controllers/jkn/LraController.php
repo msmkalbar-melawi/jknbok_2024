@@ -11,6 +11,13 @@ class LraController extends CI_Controller
     }
     public function index()
     {
+        $data['anggaran'] = $this->db->query("SELECT 
+            a.jns_ang AS kode,
+            (SELECT b.nama FROM tb_status_anggaran AS b WHERE b.kode = a.jns_ang ) AS nama
+            FROM bok_trdrka AS a GROUP BY jns_ang
+            ORDER BY kode
+        ")->result();
+
         $data['page_title'] = 'LRA JKN BOK';
         $this->template->set('title', 'LRA JKN BOK');
         $this->template->load('template', 'jkn/lra/index', $data);
@@ -69,6 +76,7 @@ class LraController extends CI_Controller
         $jenis = $_GET['jenis'];
         $dataisian = true;
         $datattd = $this->db->query("SELECT * FROM ms_ttd WHERE kd_skpd='$kd_skpd' AND id='$ttd'")->row();
+        $anggaran = $_GET['anggaran'];
         // echo ($periode2);
 
 
@@ -77,6 +85,7 @@ class LraController extends CI_Controller
             $dataisian = $this->lra
                 ->skpd($kd_skpd)
                 ->periode([$periode1,$periode2])
+                ->jenisAnggaran($anggaran)
                 ->rekening(6)
                 ->union()
                 ->rekening(5)
@@ -94,6 +103,7 @@ class LraController extends CI_Controller
                 ->type('bok')
                 ->skpd($kd_skpd)
                 ->periode([$periode1,$periode2])
+                ->jenisAnggaran($anggaran)
                 ->rekening(6)
                 ->union()
                 ->rekening(5)
@@ -180,7 +190,11 @@ class LraController extends CI_Controller
             if ($resulte['urut'] == '1' && substr($resulte['kd_rek6'], 0, 1) == '5') {
                 $totalanggaran += $resulte['anggaran'];
                 $totalrealisasi += $resulte['realisasi'];
-                $persentot = $totalrealisasi / $totalanggaran * 100;
+                if($totalrealisasi == 0) {
+                    $persentot = 0;
+                } else {
+                    $persentot = $totalrealisasi / $totalanggaran * 100;
+                }
             }
             $cRet .= "<tr>
             <td align=\"left\"  style=\"font-size:12px;border-top:solid 1px black\"> $hasil</td>

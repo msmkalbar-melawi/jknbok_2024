@@ -53,6 +53,21 @@
                 <td><input type="text" id="tgl_ttd" style="width: 170px;" /></td>
             </tr>
             <tr>
+                <td>Anggaran</td>
+                <td>
+                    <select id="anggaran" style="width: 170px;">
+                        <option value="" selected>-- Pilih --</option>
+                        <?php
+                            foreach ($anggaran as $item) {
+                                ?>
+                                    <option value="<?= $item->kode ?>"><?= $item->nama ?></option>
+                                <?php
+                            }
+                        ?>
+                    </select>
+                </td>
+            </tr>
+            <tr>
                 <td>Jenis</td>
                 <td>
                     <select id="jenis" style="width: 170px;">
@@ -157,6 +172,7 @@
         var tgl_ttd = $('#tgl_ttd').datebox('getValue');
         var ttd = $("#ttd").combogrid("getValue");
         var jenis = $("#jenis").val();
+        var anggaran = $("#anggaran").val();
         if (periode1 == '') {
             alert('Isi periode terlebih dahulu');
             return;
@@ -177,8 +193,12 @@
             alert('Pilih jenis terlebih dahulu');
             return;
         }
+        if (!anggaran) {
+           return alert('Silahkan pilih jenis anggaran') 
+        }
+
         urll = "<?php echo base_url(); ?>index.php/jkn/LraController/laporan";
-        window.open(urll + '?periode1=' + periode1 + '&periode2=' + periode2 + '&tgl_ttd=' + tgl_ttd + '&ttd=' + ttd + '&jenis=' + jenis + '&ctk=' + ctk, '_blank');
+        window.open(urll + '?periode1=' + periode1 + '&periode2=' + periode2 + '&tgl_ttd=' + tgl_ttd + '&ttd=' + ttd + '&jenis=' + jenis + '&ctk=' + ctk + '&anggaran='+anggaran, '_blank');
         window.focus();
     }
 </script>

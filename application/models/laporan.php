@@ -57,6 +57,16 @@ class Laporan extends CI_Model {
     */
     private $skpd;
 
+    /**
+    * Inisialisasi jenis anggaran
+    * 
+    * @var string $anggaran 
+    * @return 
+    * @author Emon Krismon 
+    * @link https://github.com/krismonsemanas
+    */
+    private $anggaran;
+
     public function __construct()
     {
         parent::__construct();
@@ -148,6 +158,20 @@ class Laporan extends CI_Model {
         return $sql;
     }
 
+    /**
+    * Set value jenis anggaran
+    * 
+    * @param string $anggaran
+    * @return self
+    * @author Emon Krismon 
+    * @link https://github.com/krismonsemanas
+    */
+    public function jenisAnggaran($anggaran)
+    {
+        $this->anggaran = $anggaran;
+        return $this;
+    }
+
     private function _baseQuery()
     {
         $transout = $this->type.'_trhtransout';
@@ -180,7 +204,7 @@ class Laporan extends CI_Model {
         $sql .= " FROM (";
         $sql .= $this->builder;
         $sql .= ") AS source ";
-        $sql .= " INNER JOIN ms_sub_kegiatan AS kegiatan ON source.kd_sub_kegiatan = kegiatan.kd_sub_kegiatan ORDER BY kd_sub_kegiatan,kode_rekening ";
+        $sql .= " INNER JOIN ms_sub_kegiatan AS kegiatan ON source.kd_sub_kegiatan = kegiatan.kd_sub_kegiatan ORDER BY kd_sub_kegiatan DESC, urut, kode_rekening";
         $this->query = $sql;
         return $this->query;
     }
@@ -213,6 +237,7 @@ class Laporan extends CI_Model {
 
     private function anggaran()
     {
+        $jenisAnggaran = $this->anggaran ? $this->anggaran : 'M';
         $anggaran = $this->type.'_trdrka';
         $this->builder .= "SELECT
                 kd_skpd,
@@ -226,6 +251,7 @@ class Laporan extends CI_Model {
                 ". $this->joinRekening('rka.kd_rek6') ."
             WHERE
                  kd_skpd = '". $this->skpd ."' 
+                 AND jns_ang = '". $jenisAnggaran ."'
             GROUP BY
                 kd_skpd,
                 kd_sub_kegiatan,
