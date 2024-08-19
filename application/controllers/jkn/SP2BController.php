@@ -368,16 +368,42 @@ class SP2BController extends CI_Controller
 
        
 
-        $nilaisebelumnya = $this->db->query("SELECT SUM(c.nil_pend) as penerimaan, SUM(c.nil_peng) as pengeluaran,SUM(c.nil_saldoawal) as nil_saldoawal,c.kd_skpd FROM( 
-            SELECT x.kd_skpd, (CASE x.jenis WHEN '1' THEN SUM(x.nilai) ELSE 0 END) AS nil_pend,(CASE x.jenis WHEN '2' THEN SUM(x.nilai) ELSE 0 END) AS nil_peng,(CASE x.jenis WHEN '3' THEN SUM(x.nilai) ELSE 0 END) AS nil_saldoawal FROM ( 
-            SELECT '1' as jenis, ISNULL(SUM(nilai),0) as nilai, tgl_terima as tanggal, kd_skpd FROM jkn_tr_terima WHERE tgl_terima<'$datalpj->tgl_awal' GROUP BY tgl_terima, kd_skpd 
-            UNION ALL 
-            SELECT '2' as jenis, ISNULL(SUM(a.nilai),0) as nilai, b.tgl_bukti as tanggal, b.kd_skpd FROM jkn_trdtransout a INNER JOIN jkn_trhtransout b ON b.no_bukti=a.no_bukti AND b.kd_skpd=a.kd_skpd AND b.no_sp2d=a.no_sp2d WHERE b.tgl_bukti<'$datalpj->tgl_awal' GROUP BY b.tgl_bukti,b.kd_skpd
-            UNION ALL 
-            SELECT '3' as jenis, ISNULL(SUM(a.nilai),0) as nilai, '' as tanggal, a.kd_skpd FROM jkn_saldo_awal a GROUP BY a.kd_skpd
-            -- UNION ALL 
-            -- SELECT '3' as jenis, ISNULL(SUM(a.nilai),0) as nilai, b.tgl_bukti as tanggal, b.kd_skpd FROM jkn_trdstrpot a INNER JOIN jkn_trhstrpot b ON b.no_bukti=a.no_bukti AND b.kd_skpd=a.kd_skpd WHERE b.tgl_bukti<'$datalpj->tgl_awal' GROUP BY b.tgl_bukti,b.kd_skpd
-            )x GROUP BY x.jenis,x.kd_skpd) c WHERE c.kd_skpd='$lcskpd' GROUP BY c.kd_skpd");
+        $nilaisebelumnya = $this->db->query("SELECT
+            SUM(CASE WHEN source.jenis = 1 THEN nilai ELSE 0 END) AS penerimaan,
+            SUM(CASE WHEN source.jenis = 2 THEN nilai ELSE 0 END) AS pengeluaran,
+            SUM(CASE WHEN source.jenis = 3 THEN nilai ELSE 0 END) AS nil_saldoawal
+            FROM
+                (
+                SELECT
+                    '1' AS jenis,
+                    ISNULL( SUM ( nilai ), 0 ) AS nilai 
+                FROM
+                    jkn_tr_terima 
+                WHERE
+                    YEAR ( tgl_terima ) = ? 
+                    AND MONTH ( tgl_terima ) < ? 
+                    AND kd_skpd = ? UNION ALL
+                SELECT
+                    '2' AS jenis,
+                    ISNULL( SUM ( trd.nilai ), 0 ) AS nilai 
+                FROM
+                    jkn_trhtransout AS trh
+                    INNER JOIN jkn_trdtransout AS trd ON trh.kd_skpd = trd.kd_skpd 
+                    AND trd.no_bukti = trh.no_bukti 
+                WHERE
+                    YEAR ( trh.tgl_kas ) = ? 
+                    AND MONTH ( trh.tgl_kas ) < ?
+                    AND trh.kd_skpd = ?
+                UNION ALL 
+                SELECT
+                    '3' AS jenis,
+                    nilai 
+                FROM
+                    jkn_saldo_awal a 
+                WHERE
+                kd_skpd = ? 
+            ) AS source
+        ",[$thn_ang,getBulan($datalpj->tgl_awal), $lcskpd,$thn_ang,getBulan($datalpj->tgl_awal), $lcskpd,$lcskpd]);
         $ha1 = 0;
         
         foreach ($nilaisebelumnya->result_array() as $row) {
