@@ -656,15 +656,15 @@
                         //     alert('Tidak ada transaksi');
                         //     return;
                         // }
-                        // var lcinsert;
-                        // var lcvalues;
+                        var lcinsert;
+                        var lcvalues;
                         $('#dg1').datagrid('selectAll');
                         var rows = $('#dg1').datagrid('getSelections');
 
-                        if (rows.length < 1) {
-                            alert('Tidak ada transaksi, silahkan cek kembali');
-                            return;
-                        }
+                        // if (rows.length < 1) {
+                        //     alert('Tidak ada transaksi, silahkan cek kembali');
+                        //     return;
+                        // }
                         for (var i = 0; i < rows.length; i++) {
                             cidx = rows[i].idx;
                             ckd_skpd = rows[i].kd_skpd;
@@ -677,11 +677,12 @@
                                 lcinsert = "(no_lpj, no_bukti, kd_sub_kegiatan, kd_rek6, nm_rek6, nilai, kd_skpd)";
                                 lcvalues = lcvalues + "," + "('" + nolpj + "','" + cno_bukti + "','" + ckdgiat + "','" + crek + "','" + cnmrek + "','" + cnilai +
                                     "','" + ckd_skpd + "')";
-                            } else {
-                                lcinsert = "(no_lpj, no_bukti, kd_sub_kegiatan, kd_rek6, nm_rek6, nilai, kd_skpd)";
-                                lcvalues = "values('" + nolpj + "','" + cno_bukti + "','" + ckdgiat + "','" + crek + "','" + cnmrek + "','" + cnilai +
-                                    "','" + ckd_skpd + "')";
-                            }
+                            } 
+                            // else {
+                            //     lcinsert = "(no_lpj, no_bukti, kd_sub_kegiatan, kd_rek6, nm_rek6, nilai, kd_skpd)";
+                            //     lcvalues = "values('" + nolpj + "','" + cno_bukti + "','" + ckdgiat + "','" + crek + "','" + cnmrek + "','" + cnilai +
+                            //         "','" + ckd_skpd + "')";
+                            // }
                         }
 
                         $(document).ready(function() {

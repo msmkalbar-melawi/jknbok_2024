@@ -100,20 +100,20 @@ class SP3BController extends CI_Controller
         if (!empty($hasil)) {
             echo '2';
         }
-        $sql = "insert into bok_trlpj $kolom $nilai";
-        $asg = $this->db->query($sql);
-        if ($sql) {
-            $this->db->insert('bok_trhlpj', array(
-                'no_lpj' => $this->input->post('nolpj'),
-                'kd_skpd' => $this->input->post('skpd'),
-                'keterangan' => $this->input->post('keterangan'),
-                'tgl_lpj' => $this->input->post('tgllpj'),
-                'tgl_awal' => $this->input->post('tgl1'),
-                'tgl_akhir' => $this->input->post('tgl2'),
-                'jenis' => '1',
-                'no_sp3b' => $this->input->post('no_sp3b')
-            ));
+        if ($kolom && $nilai) {
+            $sql = "insert into bok_trlpj $kolom $nilai";
+            $asg = $this->db->query($sql);
         }
+        $this->db->insert('bok_trhlpj', array(
+            'no_lpj' => $this->input->post('nolpj'),
+            'kd_skpd' => $this->input->post('skpd'),
+            'keterangan' => $this->input->post('keterangan'),
+            'tgl_lpj' => $this->input->post('tgllpj'),
+            'tgl_awal' => $this->input->post('tgl1'),
+            'tgl_akhir' => $this->input->post('tgl2'),
+            'jenis' => '1',
+            'no_sp3b' => $this->input->post('no_sp3b')
+        ));
         echo ('1');
     }
 
