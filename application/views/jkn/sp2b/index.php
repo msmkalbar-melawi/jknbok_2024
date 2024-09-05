@@ -658,10 +658,10 @@
                         // var lcvalues;
                         $('#dg1').datagrid('selectAll');
                         var rows = $('#dg1').datagrid('getSelections');
-                        if (rows.length < 1) {
-                            alert('Tidak ada transaksi, silahkan cek kembali');
-                            return;
-                        }
+                        // if (rows.length < 1) {
+                        //     alert('Tidak ada transaksi, silahkan cek kembali');
+                        //     return;
+                        // }
                         for (var i = 0; i < rows.length; i++) {
                             cidx = rows[i].idx;
                             ckd_skpd = rows[i].kd_skpd;
