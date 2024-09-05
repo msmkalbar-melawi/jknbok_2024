@@ -674,12 +674,11 @@
                                 lcinsert = "(no_lpj, no_bukti, kd_sub_kegiatan, kd_rek6, nm_rek6, nilai, kd_skpd)";
                                 lcvalues = lcvalues + "," + "('" + nolpj + "','" + cno_bukti + "','" + ckdgiat + "','" + crek + "','" + cnmrek + "','" + cnilai +
                                     "','" + ckd_skpd + "')";
-                            } 
-                            // else {
-                            //     lcinsert = "(no_lpj, no_bukti, kd_sub_kegiatan, kd_rek6, nm_rek6, nilai, kd_skpd)";
-                            //     lcvalues = "values('" + nolpj + "','" + cno_bukti + "','" + ckdgiat + "','" + crek + "','" + cnmrek + "','" + cnilai +
-                            //         "','" + ckd_skpd + "')";
-                            // }
+                            } else {
+                                lcinsert = "(no_lpj, no_bukti, kd_sub_kegiatan, kd_rek6, nm_rek6, nilai, kd_skpd)";
+                                lcvalues = "values('" + nolpj + "','" + cno_bukti + "','" + ckdgiat + "','" + crek + "','" + cnmrek + "','" + cnilai +
+                                    "','" + ckd_skpd + "')";
+                            }
                         }
 
                         $(document).ready(function() {
