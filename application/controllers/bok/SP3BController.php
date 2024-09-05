@@ -100,7 +100,7 @@ class SP3BController extends CI_Controller
         if (!empty($hasil)) {
             echo '2';
         }
-        if ($kolom && $nilai) {
+        if ($kolom) {
             $sql = "insert into bok_trlpj $kolom $nilai";
             $asg = $this->db->query($sql);
         }

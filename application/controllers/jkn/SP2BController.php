@@ -121,7 +121,7 @@ class SP2BController extends CI_Controller
             echo '2';
             return;
         }
-        if ($kolom && $nilai) {
+        if ($kolom) {
             $sql = "insert into jkn_trlpj $kolom $nilai";
             $asg = $this->db->query($sql);
         }
