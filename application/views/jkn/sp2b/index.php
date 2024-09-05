@@ -654,8 +654,8 @@
                         //     alert('Tidak ada transaksi');
                         //     return;
                         // }
-                        // var lcinsert;
-                        // var lcvalues;
+                        var lcinsert;
+                        var lcvalues;
                         $('#dg1').datagrid('selectAll');
                         var rows = $('#dg1').datagrid('getSelections');
                         // if (rows.length < 1) {
