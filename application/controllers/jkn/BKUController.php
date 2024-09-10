@@ -463,24 +463,24 @@ class BKUController extends CI_Controller{
             </thead>";
 
         if ($pilih == 1) {
-            $sql = "SELECT * FROM ( SELECT z.* FROM ((SELECT kd_skpd,tgl_kas,tgl_kas AS tanggal,CAST(no_kas AS INT) AS no_kas,'' AS kegiatan,
+            $sql = "SELECT * FROM ( SELECT z.* FROM ((SELECT kd_skpd,tgl_kas,tgl_kas AS tanggal, a.no_kas,'' AS kegiatan,
            '' AS rekening,uraian,0 AS terima,0 AS keluar , 0 AS st,jns_trans FROM trhrekal a
            where (a.tgl_kas BETWEEN '$lctgl1' AND '$lctgl2') AND
            year(a.tgl_kas) = '$thn_ang'and kd_skpd='$lcskpd')
                UNION ALL
-              ( SELECT a.kd_skpd,a.tgl_kas,NULL AS tanggal,CAST(b.no_kas AS INT) AS no_kas,b.kd_sub_kegiatan as kegiatan,b.kd_rek6 AS rekening,
+              ( SELECT a.kd_skpd,a.tgl_kas,NULL AS tanggal,b.no_kas,b.kd_sub_kegiatan as kegiatan,b.kd_rek6 AS rekening,
                b.nm_rek6 AS uraian, b.terima,b.keluar , case when b.terima<>0 then '1' else '2' end AS st, b.jns_trans FROM
                trdrekal b LEFT JOIN trhrekal a ON a.no_kas = b.no_kas and a.kd_skpd = b.kd_skpd where (a.tgl_kas BETWEEN '$lctgl1' AND '$lctgl2')
                AND year(a.tgl_kas) = '$thn_ang' and b.kd_skpd='$lcskpd'))z )okei
                ORDER BY no_kas,st";
         } else {
 
-            $sql = "SELECT * FROM ( SELECT z.* FROM ((SELECT kd_skpd,tgl_kas,tgl_kas AS tanggal,CAST(no_kas AS INT) AS no_kas,'' AS kegiatan,
+            $sql = "SELECT * FROM ( SELECT z.* FROM ((SELECT kd_skpd,tgl_kas,tgl_kas AS tanggal, a.no_kas,'' AS kegiatan,
            '' AS rekening,uraian,0 AS terima,0 AS keluar , 0 AS st,jns_trans FROM trhrekal a
            where month(a.tgl_kas) = '$bulan' AND
            year(a.tgl_kas) = '$thn_ang'and kd_skpd='$lcskpd')
                UNION ALL
-              ( SELECT a.kd_skpd,a.tgl_kas,NULL AS tanggal,CAST(b.no_kas AS INT) AS no_kas,b.kd_sub_kegiatan as kegiatan,b.kd_rek6 AS rekening,
+              ( SELECT a.kd_skpd,a.tgl_kas,NULL AS tanggal,b.no_kas,b.kd_sub_kegiatan as kegiatan,b.kd_rek6 AS rekening,
                b.nm_rek6 AS uraian, 
                CASE WHEN b.keluar+b.terima<0 THEN (keluar*-1) ELSE terima END as terima,
                CASE WHEN b.keluar+b.terima<0 THEN (terima*-1) ELSE keluar END as keluar,
