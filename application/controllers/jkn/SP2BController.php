@@ -338,8 +338,9 @@ class SP2BController extends CI_Controller
         $no_lpj = $_REQUEST['cspp'];
         $tglttd = $_REQUEST['tglttd'];
         //TTD
-        $ttd1 = str_replace(' ', '%20', $_REQUEST['ttd']);
-        $ttd2 = str_replace(' ', '%20', $_REQUEST['ttd_2']);
+        $ttd1 = $this->input->get('ttd');
+        $ttd2 = $this->input->get('ttd_2');
+
 
 
         //untuk cetak layar dan pdf
