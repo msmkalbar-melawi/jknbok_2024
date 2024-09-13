@@ -293,8 +293,8 @@ class SP3BController extends CI_Controller
         $no_lpj = $_REQUEST['cspp'];
         $tglttd = $_REQUEST['tglttd'];
         //TTD
-        $ttd1 = str_replace(' ', '%20', $_REQUEST['ttd']);
-        $ttd2 = str_replace(' ', '%20', $_REQUEST['ttd_2']);
+        $ttd1 = $this->input->get('ttd');
+        $ttd2 = $this->input->get('ttd_2');
         $datalpj = $this->db->query("SELECT * FROM bok_trhlpj WHERE kd_skpd='$lcskpd' AND no_lpj='$no_lpj'")->row();
         if ($jeniscetakan == '0') {
             $judul = 'Surat Permintaan Pengesahan Pendapatan dan Belanja (SP3B) BOK';
