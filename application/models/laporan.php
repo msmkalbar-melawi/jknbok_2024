@@ -200,7 +200,7 @@ class Laporan extends CI_Model {
                         AND '". $this->periode[1] ."' 
                     ),
                     0 
-                ) AS realisasi";
+                ) + source.realisasi AS realisasi";
         $sql .= " FROM (";
         $sql .= $this->builder;
         $sql .= ") AS source ";
@@ -218,7 +218,8 @@ class Laporan extends CI_Model {
                 ".($this->rekening - 1) ." AS urut,
                 ". $this->_masterKodeRekening() ." AS kode_rekening,
                 ". $this->_masterNamaRekening() ." AS nama_rekening,
-                SUM ( nilai ) AS anggaran 
+                0 AS anggaran,
+                SUM ( nilai ) AS realisasi 
             FROM
                 $terima terima
                 ". $this->joinRekening('terima.kd_rek6') ."
@@ -245,7 +246,8 @@ class Laporan extends CI_Model {
                 ".($this->rekening - 1) ." AS urut,
                 ". $this->_masterKodeRekening() ." AS kode_rekening,
                 ". $this->_masterNamaRekening() ." AS nama_rekening,
-                SUM ( nilai ) AS anggaran 
+                SUM ( nilai ) AS anggaran,
+                0 AS realisasi
             FROM
                 $anggaran rka
                 ". $this->joinRekening('rka.kd_rek6') ."

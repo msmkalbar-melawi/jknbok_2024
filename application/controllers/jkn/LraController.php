@@ -201,13 +201,13 @@ class LraController extends CI_Controller
             <td align=\"left\"  style=\"font-size:12px;border-top:solid 1px black\">" . $resulte['kd_rek6'] . "</td>
             <td align=\"left\"  style=\"font-size:12px;border-top:solid 1px black\">" . $resulte['nm_rek6'] . "</td>
             <td align=\"left\"  style=\"font-size:12px;border-top:solid 1px black\">" . number_format($resulte['anggaran'], 2, ",", ".") . "</td>
-            <td align=\"left\"  style=\"font-size:12px;border-top:solid 1px black\">$hasill</td>
+            <td align=\"left\"  style=\"font-size:12px;border-top:solid 1px black\">". number_format($resulte['realisasi'],2,",",".") ."</td>
             <td align=\"left\"  style=\"font-size:12px;border-top:solid 1px black\">$hasill1</td>
             <td align=\"left\"  style=\"font-size:12px;border-top:solid 1px black\">" . number_format($persen, 2, ",", ".") . "</td>
             </tr>";
         }
         $cRet .= "<tr>
-        <td align=\"left\" colspan=\"3\" style=\"font-size:12px;border-top:solid 1px black\">Total</td>
+        <td align=\"left\" colspan=\"3\" style=\"font-size:12px;border-top:solid 1px black\">Total Belanja</td>
         <td align=\"left\"  style=\"font-size:12px;border-top:solid 1px black\">" . number_format($totalanggaran, 2, ",", ".") . "</td>
         <td align=\"left\"  style=\"font-size:12px;border-top:solid 1px black\">" . number_format($totalrealisasi, 2, ",", ".") . "</td>
         <td align=\"left\"  style=\"font-size:12px;border-top:solid 1px black\">" . number_format($totalanggaran - $totalrealisasi, 2, ",", ".") . "</td>
