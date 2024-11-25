@@ -336,7 +336,7 @@ class BKUController extends CI_Controller
        
         // $sld_pajakk;
         // $sld_pajakk = !is_null($hasil_pjk) ? '0' : $pjkkk->total;
-        $sld_pajakk = !empty($pjkk->total) ? $pjkk->total : 0;
+        $sld_pajakk = $pjkkk->total;
         //$sld_pajakk = !empty($pjkkk->total) ? $pjkkk->total : '0';
         // echo $sld_pajakk; 
         // return;
